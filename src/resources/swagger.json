@@ -1,0 +1,1390 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "A Node.js api project template.",
+        "version": "v1",
+        "title": "Halcyon Api"
+    },
+    "paths": {
+        "/api/Account/Register": {
+            "post": {
+                "tags": ["Account"],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/RegisterModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Account/RegisterExternal": {
+            "post": {
+                "tags": ["Account"],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/RegisterExternalModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Account/ForgotPassword": {
+            "put": {
+                "tags": ["Account"],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/ForgotPasswordModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Account/ResetPassword": {
+            "put": {
+                "tags": ["Account"],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/ResetPasswordModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Manage": {
+            "get": {
+                "tags": ["Manage"],
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseProfileModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": ["Manage"],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/UpdateProfileModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Manage"],
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Manage/VerifyEmail": {
+            "put": {
+                "tags": ["Manage"],
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Manage/ConfirmEmail": {
+            "put": {
+                "tags": ["Manage"],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/ConfirmEmailModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Manage/ChangePassword": {
+            "put": {
+                "tags": ["Manage"],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/ChangePasswordModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Manage/SetPassword": {
+            "put": {
+                "tags": ["Manage"],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/SetPasswordModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Manage/Login": {
+            "post": {
+                "tags": ["Manage"],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/AddLoginModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Manage"],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/RemoveLoginModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Manage/TwoFactor": {
+            "get": {
+                "tags": ["Manage"],
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseTwoFactorModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": ["Manage"],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/EnableTwoFactorModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["Manage"],
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Seed": {
+            "get": {
+                "tags": ["Seed"],
+                "produces": ["application/json"],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/Token": {
+            "post": {
+                "tags": ["Token"],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/GetTokenModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseJwtModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/User": {
+            "get": {
+                "tags": ["User"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "default": 1,
+                        "format": "int32"
+                    },
+                    {
+                        "name": "size",
+                        "in": "query",
+                        "required": false,
+                        "type": "integer",
+                        "default": 10,
+                        "format": "int32"
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "sort",
+                        "in": "query",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseUserListModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["User"],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/CreateUserModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/User/{id}": {
+            "get": {
+                "tags": ["User"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseUserModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": ["User"],
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "model",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/UpdateUserModel"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["User"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/User/{id}/Lock": {
+            "put": {
+                "tags": ["User"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/User/{id}/Unlock": {
+            "put": {
+                "tags": ["User"],
+                "produces": ["application/json"],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/ResponseModel"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "definitions": {
+        "ResponseModel": {
+            "properties": {
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "RegisterModel": {
+            "required": [
+                "dateOfBirth",
+                "emailAddress",
+                "firstName",
+                "lastName",
+                "password"
+            ],
+            "properties": {
+                "emailAddress": {
+                    "type": "string",
+                    "maxLength": 254
+                },
+                "password": {
+                    "type": "string",
+                    "format": "password",
+                    "maxLength": 50
+                },
+                "firstName": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "lastName": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "dateOfBirth": {
+                    "type": "string",
+                    "format": "date"
+                }
+            }
+        },
+        "RegisterExternalModel": {
+            "required": [
+                "dateOfBirth",
+                "emailAddress",
+                "firstName",
+                "lastName"
+            ],
+            "properties": {
+                "provider": {
+                    "type": "string",
+                    "enum": ["facebook", "google"]
+                },
+                "accessToken": {
+                    "type": "string"
+                },
+                "emailAddress": {
+                    "type": "string",
+                    "maxLength": 254
+                },
+                "firstName": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "lastName": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "dateOfBirth": {
+                    "type": "string",
+                    "format": "date"
+                }
+            }
+        },
+        "ForgotPasswordModel": {
+            "required": ["emailAddress"],
+            "properties": {
+                "emailAddress": {
+                    "type": "string"
+                }
+            }
+        },
+        "ResetPasswordModel": {
+            "required": ["code", "emailAddress", "newPassword"],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "emailAddress": {
+                    "type": "string"
+                },
+                "newPassword": {
+                    "type": "string",
+                    "format": "password",
+                    "maxLength": 50
+                }
+            }
+        },
+        "ResponseProfileModel": {
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/ProfileModel"
+                },
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "ProfileModel": {
+            "properties": {
+                "emailAddress": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "dateOfBirth": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "hasPassword": {
+                    "type": "boolean"
+                },
+                "emailConfirmed": {
+                    "type": "boolean"
+                },
+                "twoFactorEnabled": {
+                    "type": "boolean"
+                },
+                "picture": {
+                    "type": "string"
+                },
+                "logins": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ExternalLoginModel"
+                    }
+                }
+            }
+        },
+        "ExternalLoginModel": {
+            "properties": {
+                "provider": {
+                    "type": "string"
+                },
+                "externalId": {
+                    "type": "string"
+                }
+            }
+        },
+        "UpdateProfileModel": {
+            "required": [
+                "dateOfBirth",
+                "emailAddress",
+                "firstName",
+                "lastName"
+            ],
+            "properties": {
+                "emailAddress": {
+                    "type": "string",
+                    "maxLength": 254
+                },
+                "firstName": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "lastName": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "dateOfBirth": {
+                    "type": "string",
+                    "format": "date"
+                }
+            }
+        },
+        "ConfirmEmailModel": {
+            "required": ["code"],
+            "properties": {
+                "code": {
+                    "type": "string"
+                }
+            }
+        },
+        "ChangePasswordModel": {
+            "required": ["currentPassword", "newPassword"],
+            "properties": {
+                "currentPassword": {
+                    "type": "string",
+                    "format": "password"
+                },
+                "newPassword": {
+                    "type": "string",
+                    "format": "password",
+                    "maxLength": 50
+                }
+            }
+        },
+        "SetPasswordModel": {
+            "required": ["newPassword"],
+            "properties": {
+                "newPassword": {
+                    "type": "string",
+                    "format": "password",
+                    "maxLength": 50
+                }
+            }
+        },
+        "AddLoginModel": {
+            "required": ["accessToken", "provider"],
+            "properties": {
+                "provider": {
+                    "type": "string",
+                    "enum": ["facebook", "google"]
+                },
+                "accessToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "RemoveLoginModel": {
+            "required": ["externalId", "provider"],
+            "properties": {
+                "provider": {
+                    "type": "string"
+                },
+                "externalId": {
+                    "type": "string"
+                }
+            }
+        },
+        "ResponseTwoFactorModel": {
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/TwoFactorModel"
+                },
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "TwoFactorModel": {
+            "properties": {
+                "authenticatorUri": {
+                    "type": "string"
+                },
+                "secret": {
+                    "type": "string"
+                }
+            }
+        },
+        "EnableTwoFactorModel": {
+            "required": ["verificationCode"],
+            "properties": {
+                "verificationCode": {
+                    "type": "string"
+                }
+            }
+        },
+        "GetTokenModel": {
+            "properties": {
+                "grantType": {
+                    "type": "string",
+                    "enum": [
+                        "Password",
+                        "RefreshToken",
+                        "External",
+                        "TwoFactor"
+                    ]
+                },
+                "emailAddress": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "provider": {
+                    "type": "string",
+                    "enum": ["facebook", "google"]
+                },
+                "accessToken": {
+                    "type": "string"
+                },
+                "verificationCode": {
+                    "type": "string"
+                },
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "ResponseJwtModel": {
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/JwtModel"
+                },
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "JwtModel": {
+            "properties": {
+                "accessToken": {
+                    "type": "string"
+                },
+                "refreshToken": {
+                    "type": "string"
+                }
+            }
+        },
+        "ResponseUserListModel": {
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/UserListModel"
+                },
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "UserListModel": {
+            "properties": {
+                "search": {
+                    "type": "string"
+                },
+                "sort": {
+                    "type": "string"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/UserSummaryModel"
+                    }
+                },
+                "page": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "size": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "totalCount": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "totalPages": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "hasPreviousPage": {
+                    "type": "boolean"
+                },
+                "hasNextPage": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "UserSummaryModel": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "emailAddress": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "isLockedOut": {
+                    "type": "boolean"
+                },
+                "hasPassword": {
+                    "type": "boolean"
+                },
+                "emailConfirmed": {
+                    "type": "boolean"
+                },
+                "twoFactorEnabled": {
+                    "type": "boolean"
+                },
+                "picture": {
+                    "type": "string"
+                }
+            }
+        },
+        "CreateUserModel": {
+            "required": [
+                "dateOfBirth",
+                "emailAddress",
+                "firstName",
+                "lastName",
+                "password"
+            ],
+            "properties": {
+                "emailAddress": {
+                    "type": "string",
+                    "maxLength": 254
+                },
+                "password": {
+                    "type": "string",
+                    "format": "password",
+                    "maxLength": 50
+                },
+                "firstName": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "lastName": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "dateOfBirth": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "ResponseUserModel": {
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/UserModel"
+                },
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "UserModel": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "emailAddress": {
+                    "type": "string"
+                },
+                "firstName": {
+                    "type": "string"
+                },
+                "lastName": {
+                    "type": "string"
+                },
+                "dateOfBirth": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "isLockedOut": {
+                    "type": "boolean"
+                },
+                "hasPassword": {
+                    "type": "boolean"
+                },
+                "emailConfirmed": {
+                    "type": "boolean"
+                },
+                "twoFactorEnabled": {
+                    "type": "boolean"
+                },
+                "picture": {
+                    "type": "string"
+                }
+            }
+        },
+        "UpdateUserModel": {
+            "required": [
+                "dateOfBirth",
+                "emailAddress",
+                "firstName",
+                "lastName"
+            ],
+            "properties": {
+                "emailAddress": {
+                    "type": "string",
+                    "maxLength": 254
+                },
+                "firstName": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "lastName": {
+                    "type": "string",
+                    "maxLength": 50
+                },
+                "dateOfBirth": {
+                    "type": "string",
+                    "format": "date"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

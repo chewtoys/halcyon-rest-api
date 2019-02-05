@@ -1,0 +1,10 @@
+{
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/artifacts": true,
+        "**/dist": true
+    },
+    "editor.tabSize": 4,
+    "editor.autoIndent": true,
+    "editor.detectIndentation": false
+}
