@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import * as repository from '../repositories/userRepository';
 import * as password from '../utils/password';
 import config from '../utils/config';
-import { generateResponse } from '../utils/express';
+import { generateResponse } from '../utils/response';
 
 export const seedData = async (req: Request, res: Response) => {
     const user = {

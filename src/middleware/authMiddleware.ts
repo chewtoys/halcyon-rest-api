@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
 import jsonWebToken from 'jsonwebtoken';
 import config from '../utils/config';
-import { generateResponse } from '../utils/express';
+import { generateResponse } from '../utils/response';
 
 export interface IJwtPayload {
     sub: string;
     role: string;
 }
 
-const authorize = (requiredRoles?: string[]) => async (
+const authMiddleware = (requiredRoles?: string[]) => async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -53,4 +53,4 @@ const authorize = (requiredRoles?: string[]) => async (
     return next();
 };
 
-export default authorize;
+export default authMiddleware;

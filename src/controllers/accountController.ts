@@ -2,13 +2,14 @@ import { Request, Response } from 'express';
 import uuidv4 from 'uuid/v4';
 import * as repository from '../repositories/userRepository';
 import providers from '../providers';
+import validate from '../middleware/validationMiddleware';
 import * as password from '../utils/password';
 import * as email from '../utils/email';
 import { validators } from '../utils/validators';
-import { generateResponse, validationMiddleware } from '../utils/express';
+import { generateResponse } from '../utils/response';
 
 export const register = [
-    validationMiddleware({
+    validate({
         emailAddress: validators.emailAddress,
         password: validators.password,
         firstName: validators.firstName,
@@ -50,7 +51,7 @@ export const register = [
 ];
 
 export const registerExternal = [
-    validationMiddleware({
+    validate({
         provider: validators.provider,
         accessToken: validators.accessToken,
         emailAddress: validators.emailAddress,
@@ -114,7 +115,7 @@ export const registerExternal = [
 ];
 
 export const forgotPassword = [
-    validationMiddleware({
+    validate({
         emailAddress: validators.emailAddress
     }),
     async (req: Request, res: Response) => {
@@ -142,7 +143,7 @@ export const forgotPassword = [
 ];
 
 export const resetPassword = [
-    validationMiddleware({
+    validate({
         code: validators.code,
         emailAddress: validators.emailAddress,
         newPassword: validators.newPassword

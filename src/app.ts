@@ -7,7 +7,9 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDoc from './resources/swagger.json';
 import config from './utils/config';
 
-import { errorMiddleware, notFoundMiddleware } from './utils/express';
+import corsMiddleware from './middleware/corsMiddleware';
+import notFoundMiddleware from './middleware/notFoundMiddleware';
+import errorMiddleware from './middleware/errorMiddleware';
 
 import seed from './routes/seed';
 import account from './routes/account';
@@ -33,16 +35,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.options('/api', (req: Request, res: Response) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header(
-        'Access-Control-Allow-Headers',
-        'Content-Type, Authorization, Content-Length, X-Requested-With'
-    );
-    return res.send(204);
-});
-
+app.options('/api', corsMiddleware);
 app.use('/api/account', account);
 app.use('/api/token', token);
 app.use('/api/manage', manage);

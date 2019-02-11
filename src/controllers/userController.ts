@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import * as repository from '../repositories/userRepository';
+import validate from '../middleware/validationMiddleware';
 import * as password from '../utils/password';
 import { tryParseInt } from '../utils/string';
 import { validators } from '../utils/validators';
-import { generateResponse, validationMiddleware } from '../utils/express';
+import { generateResponse } from '../utils/response';
 
 export const getUsers = async (req: Request, res: Response) => {
     const page = tryParseInt(req.query.page, 1);
@@ -40,7 +41,7 @@ export const getUsers = async (req: Request, res: Response) => {
 };
 
 export const createUser = [
-    validationMiddleware({
+    validate({
         emailAddress: validators.emailAddress,
         password: validators.password,
         firstName: validators.firstName,
@@ -95,7 +96,7 @@ export const getUser = async (req: Request, res: Response) => {
 };
 
 export const updateUser = [
-    validationMiddleware({
+    validate({
         emailAddress: validators.emailAddress,
         firstName: validators.firstName,
         lastName: validators.lastName,

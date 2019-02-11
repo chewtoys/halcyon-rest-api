@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
 import handlers from '../handlers';
+import validate from '../middleware/validationMiddleware';
 import jwt from '../utils/jwt';
 import { validators } from '../utils/validators';
-import { generateResponse, validationMiddleware } from '../utils/express';
+import { generateResponse } from '../utils/response';
 
 export const getToken = [
-    validationMiddleware({ grantType: validators.grantType }),
+    validate({ grantType: validators.grantType }),
     async (req: Request, res: Response) => {
         const handler = handlers[req.body.grantType];
         if (!handler) {

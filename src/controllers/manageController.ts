@@ -2,11 +2,12 @@ import { Request, Response } from 'express';
 import uuidv4 from 'uuid/v4';
 import * as repository from '../repositories/userRepository';
 import providers from '../providers';
+import validate from '../middleware/validationMiddleware';
 import * as password from '../utils/password';
 import * as twoFactor from '../utils/twoFactor';
 import * as email from '../utils/email';
 import { validators } from '../utils/validators';
-import { generateResponse, validationMiddleware } from '../utils/express';
+import { generateResponse } from '../utils/response';
 
 export const getProfile = async (req: Request, res: Response) => {
     const user = await repository.getUserById(res.locals.userId);
@@ -28,7 +29,7 @@ export const getProfile = async (req: Request, res: Response) => {
 };
 
 export const updateProfile = [
-    validationMiddleware({
+    validate({
         emailAddress: validators.emailAddress,
         firstName: validators.firstName,
         lastName: validators.lastName,
@@ -94,7 +95,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
 };
 
 export const confirmEmail = [
-    validationMiddleware({
+    validate({
         code: validators.code
     }),
     async (req: Request, res: Response) => {
@@ -118,7 +119,7 @@ export const confirmEmail = [
 ];
 
 export const setPassword = [
-    validationMiddleware({
+    validate({
         newPassword: validators.newPassword
     }),
     async (req: Request, res: Response) => {
@@ -142,7 +143,7 @@ export const setPassword = [
 ];
 
 export const changePassword = [
-    validationMiddleware({
+    validate({
         currentPassword: validators.currentPassword,
         newPassword: validators.newPassword
     }),
@@ -170,7 +171,7 @@ export const changePassword = [
 ];
 
 export const addLogin = [
-    validationMiddleware({
+    validate({
         provider: validators.provider,
         accessToken: validators.accessToken
     }),
@@ -219,7 +220,7 @@ export const addLogin = [
 ];
 
 export const removeLogin = [
-    validationMiddleware({
+    validate({
         provider: validators.provider,
         externalId: validators.externalId
     }),
@@ -257,7 +258,7 @@ export const getTwoFactorConfig = async (req: Request, res: Response) => {
 };
 
 export const enableTwoFactor = [
-    validationMiddleware({
+    validate({
         verificationCode: validators.verificationCode
     }),
     async (req: Request, res: Response) => {
