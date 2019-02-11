@@ -17,7 +17,7 @@ New-Item `
     -Force
 
 Compress-Archive `
-    -Path @("node_modules", "dist", "package.json", "web.config") `
+    -Path @("node_modules", "dist", "package.json") `
     -DestinationPath "artifacts/Halcyon.Api.zip" `
     -CompressionLevel "Fastest" `
     -Force

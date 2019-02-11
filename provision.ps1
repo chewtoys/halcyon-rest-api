@@ -2,7 +2,7 @@ param
 (
     $DEPLOY_RESOURCEGROUP = "halcyon",
     $DEPLOY_LOCATION = "westeurope",
-    $DEPLOY_APPSERVICEPLAN = "$DEPLOY_RESOURCEGROUP-plan",
+    $DEPLOY_APPSERVICEPLAN = "$DEPLOY_RESOURCEGROUP-linux",
     $DEPLOY_APPSERVICE = "$DEPLOY_RESOURCEGROUP-node-api",
     $DEPLOY_HOSTNAME = "$DEPLOY_APPSERVICE.chrispoulter.com",
     [Parameter(Mandatory = $true)]$MONGODB_URI = "",
@@ -29,13 +29,16 @@ az appservice plan create `
     -g "$DEPLOY_RESOURCEGROUP" `
     -l "$DEPLOY_LOCATION" `
     -n "$DEPLOY_APPSERVICEPLAN" `
-    --sku "SHARED"
+    --sku "B1" `
+    --is-linux
 
 Write-Host "Creating Web App..." -ForegroundColor Green
 az webapp create `
     -g "$DEPLOY_RESOURCEGROUP" `
     -p "$DEPLOY_APPSERVICEPLAN" `
-    -n "$DEPLOY_APPSERVICE"
+    -n "$DEPLOY_APPSERVICE" `
+    --runtime "NODE`"|`"10.14" `
+    --startup-file "node dist/server.js"
 
 Write-Host "Setting Host Name..." -ForegroundColor Green
 az webapp config hostname add `
