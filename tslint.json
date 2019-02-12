@@ -3,7 +3,8 @@
     "rules": {
         "object-literal-sort-keys": false,
         "ordered-imports": false,
-        "no-console": false
+        "no-console": false,
+        "no-empty-interface": false
     },
     "linterOptions": {
         "exclude": ["**/*.json"]

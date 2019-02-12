@@ -5,19 +5,74 @@ import * as password from '../utils/password';
 import { tryParseInt } from '../utils/string';
 import { validators } from '../utils/validators';
 import { generateResponse } from '../utils/response';
+import { IBaseProfileModel } from './manageController';
+
+export interface IPaginatedListModel<T> {
+    items: T[];
+    page: number;
+    size: number;
+    totalCount: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+}
+
+export interface IGetUsersModel {
+    page: string;
+    size: string;
+    search?: string;
+    sort?: string;
+}
+
+export interface IUserListModel extends IPaginatedListModel<IUserSummaryModel> {
+    search?: string;
+    sort?: string;
+}
+
+export interface IUserSummaryModel {
+    id: string;
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
+    isLockedOut: boolean;
+    hasPassword: boolean;
+    emailConfirmed: boolean;
+    twoFactorEnabled: boolean;
+    picture: string;
+}
+
+export interface IUserParams {
+    id: string;
+}
+
+export interface IUserModel extends IUserSummaryModel {
+    dateOfBirth: string;
+    roles?: string[];
+}
+
+export interface IBaseUserModel extends IBaseProfileModel {
+    roles?: string[];
+}
+
+export interface ICreateUserModel extends IBaseUserModel {
+    password: string;
+}
+
+export interface IUpdateUserModel extends IBaseUserModel {}
 
 export const getUsers = async (req: Request, res: Response) => {
-    const page = tryParseInt(req.query.page, 1);
-    const size = tryParseInt(req.query.size, 10);
+    const query = req.query as IGetUsersModel;
+    const page = tryParseInt(query.page, 1);
+    const size = tryParseInt(query.size, 10);
 
     const result = await repository.searchUsers(
         page,
         size,
-        req.query.search,
-        req.query.sort
+        query.search,
+        query.sort
     );
 
-    return generateResponse(res, 200, undefined, {
+    return generateResponse<IUserListModel>(res, 200, undefined, {
         items: result.items.map(user => ({
             id: user.id,
             emailAddress: user.emailAddress,
@@ -35,8 +90,8 @@ export const getUsers = async (req: Request, res: Response) => {
         totalCount: result.totalCount,
         hasNextPage: result.hasNextPage,
         hasPreviousPage: result.hasPreviousPage,
-        search: req.query.search,
-        sort: req.query.sort
+        search: query.search,
+        sort: query.sort
     });
 };
 
@@ -49,23 +104,25 @@ export const createUser = [
         dateOfBirth: validators.dateOfBirth
     }),
     async (req: Request, res: Response) => {
+        const body = req.body as ICreateUserModel;
+
         const existing = await repository.getUserByEmailAddress(
-            req.body.emailAddress
+            body.emailAddress
         );
 
         if (existing) {
             return generateResponse(res, 400, [
-                `User name "${req.body.emailAddress}" is already taken.`
+                `User name "${body.emailAddress}" is already taken.`
             ]);
         }
 
         const user = {
-            emailAddress: req.body.emailAddress,
-            password: await password.hash(req.body.password),
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            dateOfBirth: req.body.dateOfBirth,
-            roles: req.body.roles
+            emailAddress: body.emailAddress,
+            password: await password.hash(body.password),
+            firstName: body.firstName,
+            lastName: body.lastName,
+            dateOfBirth: body.dateOfBirth,
+            roles: body.roles
         };
 
         await repository.createUser(user);
@@ -75,12 +132,14 @@ export const createUser = [
 ];
 
 export const getUser = async (req: Request, res: Response) => {
-    const user = await repository.getUserById(req.params.id);
+    const params = req.params as IUserParams;
+
+    const user = await repository.getUserById(params.id);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);
     }
 
-    return generateResponse(res, 200, undefined, {
+    return generateResponse<IUserModel>(res, 200, undefined, {
         id: user.id,
         emailAddress: user.emailAddress,
         firstName: user.firstName,
@@ -103,19 +162,22 @@ export const updateUser = [
         dateOfBirth: validators.dateOfBirth
     }),
     async (req: Request, res: Response) => {
-        const user = await repository.getUserById(req.params.id);
+        const params = req.params as IUserParams;
+        const body = req.body as IUpdateUserModel;
+
+        const user = await repository.getUserById(params.id);
         if (!user) {
             return generateResponse(res, 404, ['User not found.']);
         }
 
-        if (user.emailAddress !== req.body.emailAddress) {
+        if (user.emailAddress !== body.emailAddress) {
             const existing = await repository.getUserByEmailAddress(
-                req.body.emailAddress
+                body.emailAddress
             );
 
             if (existing) {
                 return generateResponse(res, 400, [
-                    `User name "${req.body.emailAddress}" is already taken.`
+                    `User name "${body.emailAddress}" is already taken.`
                 ]);
             }
 
@@ -123,11 +185,11 @@ export const updateUser = [
             user.verifyEmailToken = undefined;
         }
 
-        user.emailAddress = req.body.emailAddress;
-        user.firstName = req.body.firstName;
-        user.lastName = req.body.lastName;
-        user.dateOfBirth = req.body.dateOfBirth;
-        user.roles = req.body.roles;
+        user.emailAddress = body.emailAddress;
+        user.firstName = body.firstName;
+        user.lastName = body.lastName;
+        user.dateOfBirth = body.dateOfBirth;
+        user.roles = body.roles;
         await repository.updateUser(user);
 
         return generateResponse(res, 200, ['User successfully updated.']);
@@ -135,7 +197,9 @@ export const updateUser = [
 ];
 
 export const lockUser = async (req: Request, res: Response) => {
-    const user = await repository.getUserById(req.params.id);
+    const params = req.params as IUserParams;
+
+    const user = await repository.getUserById(params.id);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);
     }
@@ -153,7 +217,9 @@ export const lockUser = async (req: Request, res: Response) => {
 };
 
 export const unlockUser = async (req: Request, res: Response) => {
-    const user = await repository.getUserById(req.params.id);
+    const params = req.params as IUserParams;
+
+    const user = await repository.getUserById(params.id);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);
     }
@@ -165,7 +231,9 @@ export const unlockUser = async (req: Request, res: Response) => {
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
-    const user = await repository.getUserById(req.params.id);
+    const params = req.params as IUserParams;
+
+    const user = await repository.getUserById(params.id);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);
     }

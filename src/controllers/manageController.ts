@@ -9,13 +9,67 @@ import * as email from '../utils/email';
 import { validators } from '../utils/validators';
 import { generateResponse } from '../utils/response';
 
+export interface IProfileModel {
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+    hasPassword: boolean;
+    emailConfirmed: boolean;
+    twoFactorEnabled: boolean;
+    picture: string;
+    logins: IExternalLoginModel[];
+}
+
+export interface IExternalLoginModel {
+    provider: string;
+    externalId: string;
+}
+
+export interface IBaseProfileModel {
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
+    dateOfBirth: string;
+}
+
+export interface IUpdateProfileModel extends IBaseProfileModel {}
+
+export interface ISetPasswordModel {
+    newPassword: string;
+}
+
+export interface IChangePasswordModel extends ISetPasswordModel {
+    currentPassword: string;
+}
+
+export interface IConfirmEmailModel {
+    code: string;
+}
+
+export interface IAddLoginModel {
+    provider: string;
+    accessToken: string;
+}
+
+export interface IRemoveLoginModel extends IExternalLoginModel {}
+
+export interface ITwoFactorModel {
+    secret: string;
+    authenticatorUri: string;
+}
+
+export interface IEnableTwoFactorModel {
+    verificationCode: string;
+}
+
 export const getProfile = async (req: Request, res: Response) => {
     const user = await repository.getUserById(res.locals.userId);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);
     }
 
-    return generateResponse(res, 200, undefined, {
+    return generateResponse<IProfileModel>(res, 200, undefined, {
         emailAddress: user.emailAddress,
         firstName: user.firstName,
         lastName: user.lastName,
@@ -36,19 +90,21 @@ export const updateProfile = [
         dateOfBirth: validators.dateOfBirth
     }),
     async (req: Request, res: Response) => {
+        const body = req.body as IUpdateProfileModel;
+
         const user = await repository.getUserById(res.locals.userId);
         if (!user) {
             return generateResponse(res, 404, ['User not found.']);
         }
 
-        if (req.body.emailAddress !== user.emailAddress) {
+        if (body.emailAddress !== user.emailAddress) {
             const existing = await repository.getUserByEmailAddress(
-                req.body.emailAddress
+                body.emailAddress
             );
 
             if (existing) {
                 return generateResponse(res, 400, [
-                    `User name "${req.body.emailAddress}" is already taken.`
+                    `User name "${body.emailAddress}" is already taken.`
                 ]);
             }
 
@@ -56,10 +112,10 @@ export const updateProfile = [
             user.verifyEmailToken = undefined;
         }
 
-        user.emailAddress = req.body.emailAddress;
-        user.firstName = req.body.firstName;
-        user.lastName = req.body.lastName;
-        user.dateOfBirth = req.body.dateOfBirth;
+        user.emailAddress = body.emailAddress;
+        user.firstName = body.firstName;
+        user.lastName = body.lastName;
+        user.dateOfBirth = body.dateOfBirth;
         await repository.updateUser(user);
 
         return generateResponse(res, 200, ['Your profile has been updated.']);
@@ -99,12 +155,14 @@ export const confirmEmail = [
         code: validators.code
     }),
     async (req: Request, res: Response) => {
+        const body = req.body as IConfirmEmailModel;
+
         const user = await repository.getUserById(res.locals.userId);
         if (!user) {
             return generateResponse(res, 404, ['User not found.']);
         }
 
-        if (req.body.code !== user.verifyEmailToken) {
+        if (body.code !== user.verifyEmailToken) {
             return generateResponse(res, 400, ['Invalid token.']);
         }
 
@@ -123,6 +181,8 @@ export const setPassword = [
         newPassword: validators.newPassword
     }),
     async (req: Request, res: Response) => {
+        const body = req.body as ISetPasswordModel;
+
         const user = await repository.getUserById(res.locals.userId);
         if (!user) {
             return generateResponse(res, 404, ['User not found.']);
@@ -134,7 +194,7 @@ export const setPassword = [
             ]);
         }
 
-        user.password = await password.hash(req.body.newPassword);
+        user.password = await password.hash(body.newPassword);
         user.passwordResetToken = undefined;
         await repository.updateUser(user);
 
@@ -148,13 +208,15 @@ export const changePassword = [
         newPassword: validators.newPassword
     }),
     async (req: Request, res: Response) => {
+        const body = req.body as IChangePasswordModel;
+
         const user = await repository.getUserById(res.locals.userId);
         if (!user) {
             return generateResponse(res, 404, ['User not found.']);
         }
 
         const valid = await password.verify(
-            req.body.currentPassword,
+            body.currentPassword,
             user.password
         );
 
@@ -162,7 +224,7 @@ export const changePassword = [
             return generateResponse(res, 400, ['Incorrect password.']);
         }
 
-        user.password = await password.hash(req.body.newPassword);
+        user.password = await password.hash(body.newPassword);
         user.passwordResetToken = undefined;
         await repository.updateUser(user);
 
@@ -176,19 +238,21 @@ export const addLogin = [
         accessToken: validators.accessToken
     }),
     async (req: Request, res: Response) => {
+        const body = req.body as IAddLoginModel;
+
         const user = await repository.getUserById(res.locals.userId);
         if (!user) {
             return generateResponse(res, 404, ['User not found.']);
         }
 
-        const provider = providers[req.body.provider];
+        const provider = providers[body.provider];
         if (!provider) {
             return generateResponse(res, 400, [
-                `Provider "${req.body.provider}" is not supported.`
+                `Provider "${body.provider}" is not supported.`
             ]);
         }
 
-        const externalUser = await provider.getUser(req.body.accessToken);
+        const externalUser = await provider.getUser(body.accessToken);
         if (!externalUser) {
             return generateResponse(res, 400, [
                 'The credentials provided were invalid.'
@@ -196,7 +260,7 @@ export const addLogin = [
         }
 
         const existing = await repository.getUserByLogin(
-            req.body.provider,
+            body.provider,
             externalUser.userId
         );
 
@@ -207,15 +271,13 @@ export const addLogin = [
         }
 
         user.logins.push({
-            provider: req.body.provider,
+            provider: body.provider,
             externalId: externalUser.userId
         });
 
         await repository.updateUser(user);
 
-        return generateResponse(res, 200, [
-            `${req.body.provider} login added.`
-        ]);
+        return generateResponse(res, 200, [`${body.provider} login added.`]);
     }
 ];
 
@@ -225,6 +287,8 @@ export const removeLogin = [
         externalId: validators.externalId
     }),
     async (req: Request, res: Response) => {
+        const body = req.body as IRemoveLoginModel;
+
         const user = await repository.getUserById(res.locals.userId);
         if (!user) {
             return generateResponse(res, 404, ['User not found.']);
@@ -232,16 +296,20 @@ export const removeLogin = [
 
         user.logins = user.logins.filter(
             login =>
-                login.provider !== req.body.provider &&
-                login.externalId !== req.body.externalId
+                login.provider !== body.provider &&
+                login.externalId !== body.externalId
         );
+
         await repository.updateUser(user);
 
-        return generateResponse(res, 200, [
-            `${req.body.provider} login removed.`
-        ]);
+        return generateResponse(res, 200, [`${body.provider} login removed.`]);
     }
 ];
+
+export interface ITwoFactorModel {
+    secret: string;
+    authenticatorUri: string;
+}
 
 export const getTwoFactorConfig = async (req: Request, res: Response) => {
     const user = await repository.getUserById(res.locals.userId);
@@ -254,7 +322,7 @@ export const getTwoFactorConfig = async (req: Request, res: Response) => {
     user.twoFactorTempSecret = result.secret;
     await repository.updateUser(user);
 
-    return generateResponse(res, 200, undefined, result);
+    return generateResponse<ITwoFactorModel>(res, 200, undefined, result);
 };
 
 export const enableTwoFactor = [
@@ -262,13 +330,15 @@ export const enableTwoFactor = [
         verificationCode: validators.verificationCode
     }),
     async (req: Request, res: Response) => {
+        const body = req.body as IEnableTwoFactorModel;
+
         const user = await repository.getUserById(res.locals.userId);
         if (!user) {
             return generateResponse(res, 404, ['User not found.']);
         }
 
         const verified = twoFactor.verify(
-            req.body.verificationCode,
+            body.verificationCode,
             user.twoFactorTempSecret
         );
 

@@ -7,6 +7,26 @@ import * as password from '../utils/password';
 import * as email from '../utils/email';
 import { validators } from '../utils/validators';
 import { generateResponse } from '../utils/response';
+import { IBaseProfileModel } from './manageController';
+
+export interface IRegisterModel extends IBaseProfileModel {
+    password: string;
+}
+
+export interface IRegisterExternalModel extends IBaseProfileModel {
+    provider: string;
+    accessToken: string;
+}
+
+export interface IForgotPasswordModel {
+    emailAddress: string;
+}
+
+export interface IResetPasswordModel {
+    code: string;
+    emailAddress: string;
+    newPassword: string;
+}
 
 export const register = [
     validate({
@@ -17,22 +37,24 @@ export const register = [
         dateOfBirth: validators.dateOfBirth
     }),
     async (req: Request, res: Response) => {
+        const body = req.body as IRegisterModel;
+
         const existing = await repository.getUserByEmailAddress(
-            req.body.emailAddress
+            body.emailAddress
         );
 
         if (existing) {
             return generateResponse(res, 400, [
-                `User name "${req.body.emailAddress}" is already taken.`
+                `User name "${body.emailAddress}" is already taken.`
             ]);
         }
 
         const user = {
-            emailAddress: req.body.emailAddress,
-            password: await password.hash(req.body.password),
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            dateOfBirth: req.body.dateOfBirth,
+            emailAddress: body.emailAddress,
+            password: await password.hash(body.password),
+            firstName: body.firstName,
+            lastName: body.lastName,
+            dateOfBirth: body.dateOfBirth,
             verifyEmailToken: uuidv4()
         };
 
@@ -60,14 +82,16 @@ export const registerExternal = [
         dateOfBirth: validators.dateOfBirth
     }),
     async (req: Request, res: Response) => {
-        const provider = providers[req.body.provider];
+        const body = req.body as IRegisterExternalModel;
+
+        const provider = providers[body.provider];
         if (!provider) {
             return generateResponse(res, 400, [
-                `Provider "${req.body.provider}" is not supported.`
+                `Provider "${body.provider}" is not supported.`
             ]);
         }
 
-        const externalUser = await provider.getUser(req.body.accessToken);
+        const externalUser = await provider.getUser(body.accessToken);
         if (!externalUser) {
             return generateResponse(res, 400, [
                 'The credentials provided were invalid.'
@@ -75,17 +99,17 @@ export const registerExternal = [
         }
 
         let existing = await repository.getUserByEmailAddress(
-            req.body.emailAddress
+            body.emailAddress
         );
 
         if (existing) {
             return generateResponse(res, 400, [
-                `User name "${req.body.emailAddress}" is already taken.`
+                `User name "${body.emailAddress}" is already taken.`
             ]);
         }
 
         existing = await repository.getUserByLogin(
-            req.body.provider,
+            body.provider,
             externalUser.userId
         );
 
@@ -96,13 +120,13 @@ export const registerExternal = [
         }
 
         const user = {
-            emailAddress: req.body.emailAddress,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            dateOfBirth: req.body.dateOfBirth,
+            emailAddress: body.emailAddress,
+            firstName: body.firstName,
+            lastName: body.lastName,
+            dateOfBirth: body.dateOfBirth,
             logins: [
                 {
-                    provider: req.body.provider,
+                    provider: body.provider,
                     externalId: externalUser.userId
                 }
             ]
@@ -119,9 +143,9 @@ export const forgotPassword = [
         emailAddress: validators.emailAddress
     }),
     async (req: Request, res: Response) => {
-        const user = await repository.getUserByEmailAddress(
-            req.body.emailAddress
-        );
+        const body = req.body as IForgotPasswordModel;
+
+        const user = await repository.getUserByEmailAddress(body.emailAddress);
 
         if (user) {
             user.passwordResetToken = uuidv4();
@@ -149,15 +173,15 @@ export const resetPassword = [
         newPassword: validators.newPassword
     }),
     async (req: Request, res: Response) => {
-        const user = await repository.getUserByEmailAddress(
-            req.body.emailAddress
-        );
+        const body = req.body as IResetPasswordModel;
 
-        if (!user || user.passwordResetToken !== req.body.code) {
+        const user = await repository.getUserByEmailAddress(body.emailAddress);
+
+        if (!user || user.passwordResetToken !== body.code) {
             return generateResponse(res, 400, ['Invalid token.']);
         }
 
-        user.password = await password.hash(req.body.newPassword);
+        user.password = await password.hash(body.newPassword);
         user.passwordResetToken = undefined;
         user.twoFactorEnabled = undefined;
         user.twoFactorSecret = undefined;

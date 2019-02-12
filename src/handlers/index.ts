@@ -5,12 +5,12 @@ import * as external from './external';
 import * as twoFactor from './twoFactor';
 
 export interface IHandlerRequest {
-    emailAddress: string;
-    password: string;
-    refreshToken: string;
-    provider: string;
-    accessToken: string;
-    verificationCode: string;
+    emailAddress?: string;
+    password?: string;
+    refreshToken?: string;
+    provider?: string;
+    accessToken?: string;
+    verificationCode?: string;
 }
 
 export interface IHandlerResponse {

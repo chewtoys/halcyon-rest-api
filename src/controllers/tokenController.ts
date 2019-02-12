@@ -5,17 +5,46 @@ import jwt from '../utils/jwt';
 import { validators } from '../utils/validators';
 import { generateResponse } from '../utils/response';
 
+export interface IGetTokenModel {
+    grantType: string;
+    emailAddress?: string;
+    password?: string;
+    provider?: string;
+    accessToken?: string;
+    verificationCode?: string;
+    refreshToken?: string;
+}
+
+export interface ITokenModel {
+    accessToken?: string;
+    refreshToken?: string;
+    isLockedOut?: boolean;
+    requiresTwoFactor?: boolean;
+    requiresExternal?: boolean;
+}
+
+export interface ICurrentUserModel {
+    sub: string;
+    exp: number;
+    given_name: string;
+    family_name: string;
+    picture: string;
+    role?: string[];
+}
+
 export const getToken = [
     validate({ grantType: validators.grantType }),
     async (req: Request, res: Response) => {
-        const handler = handlers[req.body.grantType];
+        const body = req.body as IGetTokenModel;
+
+        const handler = handlers[body.grantType];
         if (!handler) {
             return generateResponse(res, 400, [
-                `Grant Type "${req.body.provider}" is not supported.`
+                `Grant Type "${body.provider}" is not supported.`
             ]);
         }
 
-        const result = await handler.authenticate(req.body);
+        const result = await handler.authenticate(body);
         if (!result) {
             return generateResponse(res, 400, [
                 'The credentials provided were invalid.'
@@ -23,7 +52,7 @@ export const getToken = [
         }
 
         if (result.requiresTwoFactor || result.requiresExternal) {
-            return generateResponse(res, 400, undefined, result);
+            return generateResponse<ITokenModel>(res, 400, undefined, result);
         }
 
         if (result.isLockedOut) {
@@ -39,6 +68,6 @@ export const getToken = [
         }
 
         const token = await jwt(result.user);
-        return generateResponse(res, 200, undefined, token);
+        return generateResponse<ITokenModel>(res, 200, undefined, token);
     }
 ];
