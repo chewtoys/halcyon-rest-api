@@ -95,6 +95,29 @@ export const getUsers = async (req: Request, res: Response) => {
     });
 };
 
+export const getUser = async (req: Request, res: Response) => {
+    const params = req.params as IUserParams;
+
+    const user = await repository.getUserById(params.id);
+    if (!user) {
+        return generateResponse(res, 404, ['User not found.']);
+    }
+
+    return generateResponse<IUserModel>(res, 200, undefined, {
+        id: user.id,
+        emailAddress: user.emailAddress,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        dateOfBirth: user.dateOfBirth,
+        isLockedOut: user.isLockedOut,
+        hasPassword: user.hasPassword,
+        emailConfirmed: user.emailConfirmed,
+        twoFactorEnabled: user.twoFactorEnabled,
+        roles: user.roles,
+        picture: user.picture
+    });
+};
+
 export const createUser = [
     validate({
         emailAddress: validators.emailAddress,
@@ -130,29 +153,6 @@ export const createUser = [
         return generateResponse(res, 200, ['User successfully created.']);
     }
 ];
-
-export const getUser = async (req: Request, res: Response) => {
-    const params = req.params as IUserParams;
-
-    const user = await repository.getUserById(params.id);
-    if (!user) {
-        return generateResponse(res, 404, ['User not found.']);
-    }
-
-    return generateResponse<IUserModel>(res, 200, undefined, {
-        id: user.id,
-        emailAddress: user.emailAddress,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        dateOfBirth: user.dateOfBirth,
-        isLockedOut: user.isLockedOut,
-        hasPassword: user.hasPassword,
-        emailConfirmed: user.emailConfirmed,
-        twoFactorEnabled: user.twoFactorEnabled,
-        roles: user.roles,
-        picture: user.picture
-    });
-};
 
 export const updateUser = [
     validate({
