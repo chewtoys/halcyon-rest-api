@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import uuidv4 from 'uuid/v4';
 import * as repository from '../repositories/userRepository';
+import { IBaseProfileModel } from './manageController';
 import providers from '../providers';
 import validate from '../middleware/validationMiddleware';
 import * as password from '../utils/password';
 import * as email from '../utils/email';
 import { validators } from '../utils/validators';
 import { generateResponse } from '../utils/response';
-import { IBaseProfileModel } from './manageController';
 
 export interface IRegisterModel extends IBaseProfileModel {
     password: string;

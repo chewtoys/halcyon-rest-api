@@ -1,11 +1,11 @@
 import { Request, Response } from 'express';
 import * as repository from '../repositories/userRepository';
+import { IBaseProfileModel } from './manageController';
 import validate from '../middleware/validationMiddleware';
 import * as password from '../utils/password';
 import { tryParseInt } from '../utils/string';
 import { validators } from '../utils/validators';
 import { generateResponse } from '../utils/response';
-import { IBaseProfileModel } from './manageController';
 
 export interface IPaginatedListModel<T> {
     items: T[];
