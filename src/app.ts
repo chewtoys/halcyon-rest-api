@@ -35,12 +35,12 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.options('/api', corsMiddleware);
-app.use('/api/account', account);
-app.use('/api/token', token);
-app.use('/api/manage', manage);
-app.use('/api/user', user);
-app.use('/api/seed', seed);
+app.options('*', corsMiddleware);
+app.use('/account', account);
+app.use('/token', token);
+app.use('/manage', manage);
+app.use('/user', user);
+app.use('/seed', seed);
 
 app.use(
     '/swagger',
