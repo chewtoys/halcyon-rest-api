@@ -23,15 +23,6 @@ export interface ITokenModel {
     requiresExternal?: boolean;
 }
 
-export interface ICurrentUserModel {
-    sub: string;
-    exp: number;
-    given_name: string;
-    family_name: string;
-    picture: string;
-    role?: string[];
-}
-
 export const getToken = [
     validate({ grantType: validators.grantType }),
     async (req: Request, res: Response) => {
