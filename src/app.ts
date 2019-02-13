@@ -7,7 +7,6 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDoc from './resources/swagger.json';
 import config from './utils/config';
 
-import corsMiddleware from './middleware/corsMiddleware';
 import notFoundMiddleware from './middleware/notFoundMiddleware';
 import errorMiddleware from './middleware/errorMiddleware';
 
@@ -35,7 +34,6 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.options('*', corsMiddleware);
 app.use('/account', account);
 app.use('/token', token);
 app.use('/manage', manage);
