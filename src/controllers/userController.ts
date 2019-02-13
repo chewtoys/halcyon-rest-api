@@ -5,7 +5,6 @@ import { IBaseProfileModel } from './manageController';
 import validate from '../middleware/validationMiddleware';
 import * as password from '../utils/password';
 import { tryParseInt } from '../utils/string';
-import { validators } from '../utils/validators';
 import { generateResponse } from '../utils/response';
 
 export interface IPaginatedListModel<T> {
