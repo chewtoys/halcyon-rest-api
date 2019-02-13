@@ -120,13 +120,13 @@ export const getUser = wrap(async (req: Request, res: Response) => {
 });
 
 export const createUser = [
-    validate({
-        emailAddress: validators.emailAddress,
-        password: validators.password,
-        firstName: validators.firstName,
-        lastName: validators.lastName,
-        dateOfBirth: validators.dateOfBirth
-    }),
+    validate([
+        'emailAddress',
+        'password',
+        'firstName',
+        'lastName',
+        'dateOfBirth'
+    ]),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as ICreateUserModel;
 
@@ -156,12 +156,7 @@ export const createUser = [
 ];
 
 export const updateUser = [
-    validate({
-        emailAddress: validators.emailAddress,
-        firstName: validators.firstName,
-        lastName: validators.lastName,
-        dateOfBirth: validators.dateOfBirth
-    }),
+    validate(['emailAddress', 'firstName', 'lastName', 'dateOfBirth']),
     wrap(async (req: Request, res: Response) => {
         const params = req.params as IUserParams;
         const body = req.body as IUpdateUserModel;

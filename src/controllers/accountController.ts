@@ -7,7 +7,6 @@ import providers from '../providers';
 import validate from '../middleware/validationMiddleware';
 import * as password from '../utils/password';
 import * as email from '../utils/email';
-import { validators } from '../utils/validators';
 import { generateResponse } from '../utils/response';
 
 export interface IRegisterModel extends IBaseProfileModel {
@@ -30,13 +29,13 @@ export interface IResetPasswordModel {
 }
 
 export const register = [
-    validate({
-        emailAddress: validators.emailAddress,
-        password: validators.password,
-        firstName: validators.firstName,
-        lastName: validators.lastName,
-        dateOfBirth: validators.dateOfBirth
-    }),
+    validate([
+        'emailAddress',
+        'password',
+        'firstName',
+        'lastName',
+        'dateOfBirth'
+    ]),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IRegisterModel;
 
@@ -74,14 +73,14 @@ export const register = [
 ];
 
 export const registerExternal = [
-    validate({
-        provider: validators.provider,
-        accessToken: validators.accessToken,
-        emailAddress: validators.emailAddress,
-        firstName: validators.firstName,
-        lastName: validators.lastName,
-        dateOfBirth: validators.dateOfBirth
-    }),
+    validate([
+        'provider',
+        'accessToken',
+        'emailAddress',
+        'firstName',
+        'lastName',
+        'dateOfBirth'
+    ]),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IRegisterExternalModel;
 
@@ -140,9 +139,7 @@ export const registerExternal = [
 ];
 
 export const forgotPassword = [
-    validate({
-        emailAddress: validators.emailAddress
-    }),
+    validate(['emailAddress']),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IForgotPasswordModel;
 
@@ -168,11 +165,7 @@ export const forgotPassword = [
 ];
 
 export const resetPassword = [
-    validate({
-        code: validators.code,
-        emailAddress: validators.emailAddress,
-        newPassword: validators.newPassword
-    }),
+    validate(['code', 'emailAddress', 'newPassword']),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IResetPasswordModel;
 

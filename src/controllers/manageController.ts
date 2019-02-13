@@ -7,7 +7,6 @@ import validate from '../middleware/validationMiddleware';
 import * as password from '../utils/password';
 import * as twoFactor from '../utils/twoFactor';
 import * as email from '../utils/email';
-import { validators } from '../utils/validators';
 import { generateResponse } from '../utils/response';
 
 export interface IProfileModel {
@@ -84,12 +83,7 @@ export const getProfile = wrap(async (req: Request, res: Response) => {
 });
 
 export const updateProfile = [
-    validate({
-        emailAddress: validators.emailAddress,
-        firstName: validators.firstName,
-        lastName: validators.lastName,
-        dateOfBirth: validators.dateOfBirth
-    }),
+    validate(['emailAddress', 'firstName', 'lastName', 'dateOfBirth']),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IUpdateProfileModel;
 
@@ -152,9 +146,7 @@ export const verifyEmail = wrap(async (req: Request, res: Response) => {
 });
 
 export const confirmEmail = [
-    validate({
-        code: validators.code
-    }),
+    validate(['code']),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IConfirmEmailModel;
 
@@ -178,9 +170,7 @@ export const confirmEmail = [
 ];
 
 export const setPassword = [
-    validate({
-        newPassword: validators.newPassword
-    }),
+    validate(['newPassword']),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as ISetPasswordModel;
 
@@ -204,10 +194,7 @@ export const setPassword = [
 ];
 
 export const changePassword = [
-    validate({
-        currentPassword: validators.currentPassword,
-        newPassword: validators.newPassword
-    }),
+    validate(['currentPassword', 'newPassword']),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IChangePasswordModel;
 
@@ -234,10 +221,7 @@ export const changePassword = [
 ];
 
 export const addLogin = [
-    validate({
-        provider: validators.provider,
-        accessToken: validators.accessToken
-    }),
+    validate(['provider', 'accessToken']),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IAddLoginModel;
 
@@ -283,10 +267,7 @@ export const addLogin = [
 ];
 
 export const removeLogin = [
-    validate({
-        provider: validators.provider,
-        externalId: validators.externalId
-    }),
+    validate(['provider', 'externalId']),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IRemoveLoginModel;
 
@@ -322,9 +303,7 @@ export const getTwoFactorConfig = wrap(async (req: Request, res: Response) => {
 });
 
 export const enableTwoFactor = [
-    validate({
-        verificationCode: validators.verificationCode
-    }),
+    validate(['verificationCode']),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IEnableTwoFactorModel;
 

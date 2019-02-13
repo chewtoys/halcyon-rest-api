@@ -1,6 +1,6 @@
-import joi from 'joi';
+import joi, { StringSchema } from 'joi';
 
-export const validators = {
+export const validators: { [key: string]: StringSchema } = {
     emailAddress: joi
         .string()
         .required()
@@ -83,7 +83,13 @@ export const validators = {
         .label('Grant Type')
 };
 
-export const validateSchema = (data: any, schema: {}): string[] => {
+export const validateFields = (data: any, fields: string[]): string[] => {
+    const schema: { [key: string]: StringSchema } = {};
+
+    for (const key of fields) {
+        schema[key] = validators[key];
+    }
+
     const valid = joi.validate(data || {}, joi.object().keys(schema), {
         abortEarly: false,
         allowUnknown: true

@@ -3,7 +3,6 @@ import { wrap } from 'async-middleware';
 import handlers from '../handlers';
 import validate from '../middleware/validationMiddleware';
 import jwt from '../utils/jwt';
-import { validators } from '../utils/validators';
 import { generateResponse } from '../utils/response';
 
 export interface IGetTokenModel {
@@ -25,7 +24,7 @@ export interface ITokenModel {
 }
 
 export const getToken = [
-    validate({ grantType: validators.grantType }),
+    validate(["grantType"]),
     wrap(async(req: Request, res: Response) => {
         const body = req.body as IGetTokenModel;
 
