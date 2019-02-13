@@ -83,7 +83,7 @@ export const validators: { [key: string]: StringSchema } = {
         .label('Grant Type')
 };
 
-export const validateFields = (data: any, fields: string[]): string[] => {
+export const validateSchema = (data: any, fields: string[]): string[] => {
     const schema: { [key: string]: StringSchema } = {};
 
     for (const key of fields) {
