@@ -13,6 +13,7 @@
         "format": "prettier --write \"**/*.{ts,tsx,json,scss,md,yml}\""
     },
     "dependencies": {
+        "async-middleware": "1.2.1",
         "bcryptjs": "2.4.3",
         "body-parser": "1.18.3",
         "cors": "2.8.5",
@@ -20,10 +21,10 @@
         "express": "4.16.4",
         "joi": "14.3.1",
         "jsonwebtoken": "8.4.0",
-        "mongoose": "5.4.2",
+        "mongoose": "5.4.11",
         "morgan": "1.9.1",
         "node-fetch": "2.3.0",
-        "nodemailer": "5.0.0",
+        "nodemailer": "5.1.1",
         "speakeasy": "2.0.0",
         "swagger-ui-express": "4.0.2",
         "uuid": "3.3.2"
@@ -31,21 +32,21 @@
     "devDependencies": {
         "@types/bcryptjs": "2.4.2",
         "@types/cors": "2.8.4",
-        "@types/express": "4.16.0",
-        "@types/joi": "14.0.1",
+        "@types/express": "4.16.1",
+        "@types/joi": "14.3.1",
         "@types/jsonwebtoken": "8.3.0",
-        "@types/mongoose": "5.3.7",
+        "@types/mongoose": "5.3.15",
         "@types/morgan": "1.7.35",
-        "@types/node-fetch": "2.1.4",
+        "@types/node-fetch": "2.1.6",
         "@types/nodemailer": "4.6.5",
         "@types/speakeasy": "2.0.3",
         "@types/swagger-ui-express": "3.0.0",
         "@types/uuid": "3.4.4",
         "concurrently": "4.1.0",
-        "nodemon": "1.18.9",
-        "prettier": "1.15.3",
-        "tslint": "5.12.0",
-        "tslint-config-prettier": "1.17.0",
-        "typescript": "3.2.2"
+        "nodemon": "1.18.10",
+        "prettier": "1.16.4",
+        "tslint": "5.12.1",
+        "tslint-config-prettier": "1.18.0",
+        "typescript": "3.3.3"
     }
 }

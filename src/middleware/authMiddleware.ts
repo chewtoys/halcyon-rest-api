@@ -1,56 +1,51 @@
 import { Request, Response, NextFunction } from 'express';
+import { wrap } from 'async-middleware';
 import jsonWebToken from 'jsonwebtoken';
 import config from '../utils/config';
-import { generateResponse } from '../utils/response';
 
 export interface IJwtPayload {
     sub: string;
     role: string;
 }
 
-const authMiddleware = (requiredRoles?: string[]) => async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
-    const token =
-        req.headers.authorization &&
-        req.headers.authorization.replace(/bearer /giu, '');
+const authMiddleware = (requiredRoles?: string[]) =>
+    wrap(async (req: Request, res: Response, next: NextFunction) => {
+        const token =
+            req.headers.authorization &&
+            req.headers.authorization.replace(/bearer /giu, '');
 
-    if (!token) {
-        return generateResponse(res, 401, ['The token provided was invalid.']);
-    }
+        if (!token) {
+            throw Error('UnauthorizedError');
+        }
 
-    let payload: IJwtPayload;
-    try {
-        payload = (await jsonWebToken.verify(
-            token,
-            config.JWT_SECURITYKEY
-        )) as IJwtPayload;
-    } catch (error) {
-        console.error('Verify Token Failed', error);
-    }
+        let payload: IJwtPayload;
+        try {
+            payload = (await jsonWebToken.verify(
+                token,
+                config.JWT_SECURITYKEY
+            )) as IJwtPayload;
+        } catch (error) {
+            console.error('Verify Token Failed', error);
+        }
 
-    if (!payload) {
-        return generateResponse(res, 401, ['The token provided was invalid.']);
-    }
+        if (!payload) {
+            throw Error('UnauthorizedError');
+        }
 
-    res.locals.userId = payload.sub;
+        res.locals.userId = payload.sub;
 
-    if (!requiredRoles) {
+        if (!requiredRoles) {
+            return next();
+        }
+
+        if (
+            !payload.role ||
+            !requiredRoles.some(value => payload.role.includes(value))
+        ) {
+            throw Error('PermissionDeniedError');
+        }
+
         return next();
-    }
-
-    if (
-        !payload.role ||
-        !requiredRoles.some(value => payload.role.includes(value))
-    ) {
-        return generateResponse(res, 403, [
-            'You are not authorized to view this resource.'
-        ]);
-    }
-
-    return next();
-};
+    });
 
 export default authMiddleware;

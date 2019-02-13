@@ -1,10 +1,11 @@
 import { Request, Response } from 'express';
+import { wrap } from 'async-middleware';
 import * as repository from '../repositories/userRepository';
 import * as password from '../utils/password';
 import config from '../utils/config';
 import { generateResponse } from '../utils/response';
 
-export const seedData = async (req: Request, res: Response) => {
+export const seedData = wrap(async (req: Request, res: Response) => {
     const user = {
         emailAddress: config.SEED_EMAILADDRESS,
         password: await password.hash(config.SEED_PASSWORD),
@@ -22,4 +23,4 @@ export const seedData = async (req: Request, res: Response) => {
     await repository.createUser(user);
 
     return generateResponse(res, 200, ['Database seeded.']);
-};
+});

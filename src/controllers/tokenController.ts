@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { wrap } from 'async-middleware';
 import handlers from '../handlers';
 import validate from '../middleware/validationMiddleware';
 import jwt from '../utils/jwt';
@@ -25,7 +26,7 @@ export interface ITokenModel {
 
 export const getToken = [
     validate({ grantType: validators.grantType }),
-    async (req: Request, res: Response) => {
+    wrap(async(req: Request, res: Response) => {
         const body = req.body as IGetTokenModel;
 
         const handler = handlers[body.grantType];
@@ -61,4 +62,4 @@ export const getToken = [
         const token = await jwt(result.user);
         return generateResponse<ITokenModel>(res, 200, undefined, token);
     }
-];
+]);

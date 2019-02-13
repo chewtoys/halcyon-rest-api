@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { wrap } from 'async-middleware';
 import uuidv4 from 'uuid/v4';
 import * as repository from '../repositories/userRepository';
 import { IBaseProfileModel } from './manageController';
@@ -36,7 +37,7 @@ export const register = [
         lastName: validators.lastName,
         dateOfBirth: validators.dateOfBirth
     }),
-    async (req: Request, res: Response) => {
+    wrap(async (req: Request, res: Response) => {
         const body = req.body as IRegisterModel;
 
         const existing = await repository.getUserByEmailAddress(
@@ -69,7 +70,7 @@ export const register = [
         });
 
         return generateResponse(res, 200, ['User successfully registered.']);
-    }
+    })
 ];
 
 export const registerExternal = [
@@ -81,7 +82,7 @@ export const registerExternal = [
         lastName: validators.lastName,
         dateOfBirth: validators.dateOfBirth
     }),
-    async (req: Request, res: Response) => {
+    wrap(async (req: Request, res: Response) => {
         const body = req.body as IRegisterExternalModel;
 
         const provider = providers[body.provider];
@@ -135,14 +136,14 @@ export const registerExternal = [
         await repository.createUser(user);
 
         return generateResponse(res, 200, ['User successfully registered.']);
-    }
+    })
 ];
 
 export const forgotPassword = [
     validate({
         emailAddress: validators.emailAddress
     }),
-    async (req: Request, res: Response) => {
+    wrap(async (req: Request, res: Response) => {
         const body = req.body as IForgotPasswordModel;
 
         const user = await repository.getUserByEmailAddress(body.emailAddress);
@@ -163,7 +164,7 @@ export const forgotPassword = [
         return generateResponse(res, 200, [
             'Instructions as to how to reset your password have been sent to you via email.'
         ]);
-    }
+    })
 ];
 
 export const resetPassword = [
@@ -172,7 +173,7 @@ export const resetPassword = [
         emailAddress: validators.emailAddress,
         newPassword: validators.newPassword
     }),
-    async (req: Request, res: Response) => {
+    wrap(async (req: Request, res: Response) => {
         const body = req.body as IResetPasswordModel;
 
         const user = await repository.getUserByEmailAddress(body.emailAddress);
@@ -188,5 +189,5 @@ export const resetPassword = [
         await repository.updateUser(user);
 
         return generateResponse(res, 200, ['Your password has been reset.']);
-    }
+    })
 ];

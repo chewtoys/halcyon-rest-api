@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { wrap } from 'async-middleware';
 import uuidv4 from 'uuid/v4';
 import * as repository from '../repositories/userRepository';
 import providers from '../providers';
@@ -63,7 +64,7 @@ export interface IEnableTwoFactorModel {
     verificationCode: string;
 }
 
-export const getProfile = async (req: Request, res: Response) => {
+export const getProfile = wrap(async (req: Request, res: Response) => {
     const user = await repository.getUserById(res.locals.userId);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);
@@ -80,7 +81,7 @@ export const getProfile = async (req: Request, res: Response) => {
         picture: user.picture,
         logins: user.logins
     });
-};
+});
 
 export const updateProfile = [
     validate({
@@ -89,7 +90,7 @@ export const updateProfile = [
         lastName: validators.lastName,
         dateOfBirth: validators.dateOfBirth
     }),
-    async (req: Request, res: Response) => {
+    wrap(async (req: Request, res: Response) => {
         const body = req.body as IUpdateProfileModel;
 
         const user = await repository.getUserById(res.locals.userId);
@@ -119,10 +120,10 @@ export const updateProfile = [
         await repository.updateUser(user);
 
         return generateResponse(res, 200, ['Your profile has been updated.']);
-    }
+    })
 ];
 
-export const verifyEmail = async (req: Request, res: Response) => {
+export const verifyEmail = wrap(async (req: Request, res: Response) => {
     const user = await repository.getUserById(res.locals.userId);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);
@@ -148,13 +149,13 @@ export const verifyEmail = async (req: Request, res: Response) => {
     return generateResponse(res, 200, [
         'Instructions as to how to verify your email address have been sent to you via email.'
     ]);
-};
+});
 
 export const confirmEmail = [
     validate({
         code: validators.code
     }),
-    async (req: Request, res: Response) => {
+    wrap(async (req: Request, res: Response) => {
         const body = req.body as IConfirmEmailModel;
 
         const user = await repository.getUserById(res.locals.userId);
@@ -173,14 +174,14 @@ export const confirmEmail = [
         return generateResponse(res, 200, [
             'Your email address has been verified.'
         ]);
-    }
+    })
 ];
 
 export const setPassword = [
     validate({
         newPassword: validators.newPassword
     }),
-    async (req: Request, res: Response) => {
+    wrap(async (req: Request, res: Response) => {
         const body = req.body as ISetPasswordModel;
 
         const user = await repository.getUserById(res.locals.userId);
@@ -199,7 +200,7 @@ export const setPassword = [
         await repository.updateUser(user);
 
         return generateResponse(res, 200, ['Your password has been set.']);
-    }
+    })
 ];
 
 export const changePassword = [
@@ -207,7 +208,7 @@ export const changePassword = [
         currentPassword: validators.currentPassword,
         newPassword: validators.newPassword
     }),
-    async (req: Request, res: Response) => {
+    wrap(async (req: Request, res: Response) => {
         const body = req.body as IChangePasswordModel;
 
         const user = await repository.getUserById(res.locals.userId);
@@ -229,7 +230,7 @@ export const changePassword = [
         await repository.updateUser(user);
 
         return generateResponse(res, 200, ['Your password has been changed.']);
-    }
+    })
 ];
 
 export const addLogin = [
@@ -237,7 +238,7 @@ export const addLogin = [
         provider: validators.provider,
         accessToken: validators.accessToken
     }),
-    async (req: Request, res: Response) => {
+    wrap(async (req: Request, res: Response) => {
         const body = req.body as IAddLoginModel;
 
         const user = await repository.getUserById(res.locals.userId);
@@ -278,7 +279,7 @@ export const addLogin = [
         await repository.updateUser(user);
 
         return generateResponse(res, 200, [`${body.provider} login added.`]);
-    }
+    })
 ];
 
 export const removeLogin = [
@@ -286,7 +287,7 @@ export const removeLogin = [
         provider: validators.provider,
         externalId: validators.externalId
     }),
-    async (req: Request, res: Response) => {
+    wrap(async (req: Request, res: Response) => {
         const body = req.body as IRemoveLoginModel;
 
         const user = await repository.getUserById(res.locals.userId);
@@ -303,15 +304,10 @@ export const removeLogin = [
         await repository.updateUser(user);
 
         return generateResponse(res, 200, [`${body.provider} login removed.`]);
-    }
+    })
 ];
 
-export interface ITwoFactorModel {
-    secret: string;
-    authenticatorUri: string;
-}
-
-export const getTwoFactorConfig = async (req: Request, res: Response) => {
+export const getTwoFactorConfig = wrap(async (req: Request, res: Response) => {
     const user = await repository.getUserById(res.locals.userId);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);
@@ -323,13 +319,13 @@ export const getTwoFactorConfig = async (req: Request, res: Response) => {
     await repository.updateUser(user);
 
     return generateResponse<ITwoFactorModel>(res, 200, undefined, result);
-};
+});
 
 export const enableTwoFactor = [
     validate({
         verificationCode: validators.verificationCode
     }),
-    async (req: Request, res: Response) => {
+    wrap(async (req: Request, res: Response) => {
         const body = req.body as IEnableTwoFactorModel;
 
         const user = await repository.getUserById(res.locals.userId);
@@ -357,10 +353,10 @@ export const enableTwoFactor = [
         return generateResponse(res, 200, [
             'Two factor authentication has been enabled.'
         ]);
-    }
+    })
 ];
 
-export const disableTwoFactor = async (req: Request, res: Response) => {
+export const disableTwoFactor = wrap(async (req: Request, res: Response) => {
     const user = await repository.getUserById(res.locals.userId);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);
@@ -373,9 +369,9 @@ export const disableTwoFactor = async (req: Request, res: Response) => {
     return generateResponse(res, 200, [
         'Two factor authentication has been disabled.'
     ]);
-};
+});
 
-export const deleteAccount = async (req: Request, res: Response) => {
+export const deleteAccount = wrap(async (req: Request, res: Response) => {
     const user = await repository.getUserById(res.locals.userId);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);
@@ -384,4 +380,4 @@ export const deleteAccount = async (req: Request, res: Response) => {
     await repository.removeUser(user);
 
     return generateResponse(res, 200, ['Your account has been deleted.']);
-};
+});

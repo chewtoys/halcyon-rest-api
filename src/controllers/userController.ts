@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { wrap } from 'async-middleware';
 import * as repository from '../repositories/userRepository';
 import { IBaseProfileModel } from './manageController';
 import validate from '../middleware/validationMiddleware';
@@ -60,7 +61,7 @@ export interface ICreateUserModel extends IBaseUserModel {
 
 export interface IUpdateUserModel extends IBaseUserModel {}
 
-export const getUsers = async (req: Request, res: Response) => {
+export const getUsers = wrap(async (req: Request, res: Response) => {
     const query = req.query as IGetUsersModel;
     const page = tryParseInt(query.page, 1);
     const size = tryParseInt(query.size, 10);
@@ -93,9 +94,9 @@ export const getUsers = async (req: Request, res: Response) => {
         search: query.search,
         sort: query.sort
     });
-};
+});
 
-export const getUser = async (req: Request, res: Response) => {
+export const getUser = wrap(async (req: Request, res: Response) => {
     const params = req.params as IUserParams;
 
     const user = await repository.getUserById(params.id);
@@ -116,7 +117,7 @@ export const getUser = async (req: Request, res: Response) => {
         roles: user.roles,
         picture: user.picture
     });
-};
+});
 
 export const createUser = [
     validate({
@@ -126,7 +127,7 @@ export const createUser = [
         lastName: validators.lastName,
         dateOfBirth: validators.dateOfBirth
     }),
-    async (req: Request, res: Response) => {
+    wrap(async (req: Request, res: Response) => {
         const body = req.body as ICreateUserModel;
 
         const existing = await repository.getUserByEmailAddress(
@@ -151,7 +152,7 @@ export const createUser = [
         await repository.createUser(user);
 
         return generateResponse(res, 200, ['User successfully created.']);
-    }
+    })
 ];
 
 export const updateUser = [
@@ -161,7 +162,7 @@ export const updateUser = [
         lastName: validators.lastName,
         dateOfBirth: validators.dateOfBirth
     }),
-    async (req: Request, res: Response) => {
+    wrap(async (req: Request, res: Response) => {
         const params = req.params as IUserParams;
         const body = req.body as IUpdateUserModel;
 
@@ -193,10 +194,10 @@ export const updateUser = [
         await repository.updateUser(user);
 
         return generateResponse(res, 200, ['User successfully updated.']);
-    }
+    })
 ];
 
-export const lockUser = async (req: Request, res: Response) => {
+export const lockUser = wrap(async (req: Request, res: Response) => {
     const params = req.params as IUserParams;
 
     const user = await repository.getUserById(params.id);
@@ -214,9 +215,9 @@ export const lockUser = async (req: Request, res: Response) => {
     await repository.updateUser(user);
 
     return generateResponse(res, 200, ['User successfully locked.']);
-};
+});
 
-export const unlockUser = async (req: Request, res: Response) => {
+export const unlockUser = wrap(async (req: Request, res: Response) => {
     const params = req.params as IUserParams;
 
     const user = await repository.getUserById(params.id);
@@ -228,9 +229,9 @@ export const unlockUser = async (req: Request, res: Response) => {
     await repository.updateUser(user);
 
     return generateResponse(res, 200, ['User successfully unlocked.']);
-};
+});
 
-export const deleteUser = async (req: Request, res: Response) => {
+export const deleteUser = wrap(async (req: Request, res: Response) => {
     const params = req.params as IUserParams;
 
     const user = await repository.getUserById(params.id);
@@ -247,4 +248,4 @@ export const deleteUser = async (req: Request, res: Response) => {
     await repository.removeUser(user);
 
     return generateResponse(res, 200, ['User successfully deleted.']);
-};
+});
