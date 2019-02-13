@@ -1,9 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { generateResponse } from '../utils/response';
 
-const errorMiddleware = (err: any, req: Request, res: Response, next: NextFunction) => {
-    console.log('BANG!!!!', err);
-
+const errorMiddleware = (err: any, req: Request, res: Response) => {
     if (err.message === 'UnauthorizedError') {
         return generateResponse(res, 401, ['The token provided was invalid.']);
     }
