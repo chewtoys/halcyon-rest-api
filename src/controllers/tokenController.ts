@@ -24,8 +24,8 @@ export interface ITokenModel {
 }
 
 export const getToken = [
-    validate(["grantType"]),
-    wrap(async(req: Request, res: Response) => {
+    validate(['grantType']),
+    wrap(async (req: Request, res: Response) => {
         const body = req.body as IGetTokenModel;
 
         const handler = handlers[body.grantType];

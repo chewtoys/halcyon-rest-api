@@ -16,10 +16,7 @@ import token from './routes/token';
 import manage from './routes/manage';
 import user from './routes/user';
 
-mongoose.connect(
-    config.MONGODB_URI,
-    { useNewUrlParser: true }
-);
+mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true });
 mongoose.set('useCreateIndex', true);
 mongoose.Promise = global.Promise;
 

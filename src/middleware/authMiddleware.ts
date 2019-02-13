@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import { wrap } from 'async-middleware';
 import jsonWebToken from 'jsonwebtoken';
 import config from '../utils/config';
+import { generateResponse } from '../utils/response';
 
 export interface IJwtPayload {
     sub: string;
@@ -15,7 +16,9 @@ const authMiddleware = (requiredRoles?: string[]) =>
             req.headers.authorization.replace(/bearer /giu, '');
 
         if (!token) {
-            throw Error('UnauthorizedError');
+            return generateResponse(res, 401, [
+                'The token provided was invalid.'
+            ]);
         }
 
         let payload: IJwtPayload;
@@ -29,7 +32,9 @@ const authMiddleware = (requiredRoles?: string[]) =>
         }
 
         if (!payload) {
-            throw Error('UnauthorizedError');
+            return generateResponse(res, 401, [
+                'The token provided was invalid.'
+            ]);
         }
 
         res.locals.userId = payload.sub;
@@ -42,7 +47,9 @@ const authMiddleware = (requiredRoles?: string[]) =>
             !payload.role ||
             !requiredRoles.some(value => payload.role.includes(value))
         ) {
-            throw Error('PermissionDeniedError');
+            return generateResponse(res, 403, [
+                'You are not authorized to view this resource.'
+            ]);
         }
 
         return next();
