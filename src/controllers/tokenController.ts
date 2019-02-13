@@ -60,5 +60,5 @@ export const getToken = [
 
         const token = await jwt(result.user);
         return generateResponse<ITokenModel>(res, 200, undefined, token);
-    }
-]);
+    })
+];
