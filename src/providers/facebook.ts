@@ -1,5 +1,5 @@
 import { IProviderResponse } from '.';
-import * as http from '../utils/http';
+import { get } from '../utils/http';
 import config from '../utils/config';
 
 const baseUrl = 'https://graph.facebook.com/v3.1/debug_token';
@@ -19,13 +19,7 @@ export const getUser = async (
         config.FACEBOOK_APPID
     }|${config.FACEBOOK_APPSECRET}`;
 
-    let result;
-    try {
-        result = await http.get<IFacebookResponse>(url);
-    } catch (error) {
-        console.error('Facebook Get User Failed', error);
-    }
-
+    const result = await get<IFacebookResponse>(url);
     if (!result || !result.data || !result.data.user_id) {
         return undefined;
     }
