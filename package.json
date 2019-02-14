@@ -10,7 +10,8 @@
         "watch": "tsc -w",
         "serve": "nodemon --inspect dist/server.js",
         "lint": "tslint -c tslint.json -p tsconfig.json",
-        "format": "prettier --write \"**/*.{ts,tsx,json,scss,md,yml}\""
+        "format": "prettier --write \"**/*.{ts,tsx,json,scss,md,yml}\"",
+        "heroku-postbuild": "yarn build"
     },
     "dependencies": {
         "async-middleware": "1.2.1",
