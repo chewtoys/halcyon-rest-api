@@ -1,5 +1,4 @@
 node_modules
-artifacts
 dist
 yarn-error.log
 .env
