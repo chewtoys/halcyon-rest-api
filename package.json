@@ -11,7 +11,7 @@
         "serve": "nodemon --inspect dist/server.js",
         "lint": "tslint -c tslint.json -p tsconfig.json",
         "format": "prettier --write \"**/*.{ts,tsx,json,scss,md,yml,html}\"",
-        "predeploy": "yarn build",
+        "predeploy": "yarn lint && yarn build",
         "deploy": "serverless deploy"
     },
     "dependencies": {
