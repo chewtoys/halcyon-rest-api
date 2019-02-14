@@ -10,7 +10,9 @@
         "watch": "tsc -w",
         "serve": "nodemon --inspect dist/server.js",
         "lint": "tslint -c tslint.json -p tsconfig.json",
-        "format": "prettier --write \"**/*.{ts,tsx,json,scss,md,yml,html}\""
+        "format": "prettier --write \"**/*.{ts,tsx,json,scss,md,yml,html}\"",
+        "predeploy": "yarn build",
+        "deploy": "serverless deploy"
     },
     "dependencies": {
         "async-middleware": "1.2.1",
@@ -27,6 +29,7 @@
         "morgan": "1.9.1",
         "node-fetch": "2.3.0",
         "nodemailer": "5.1.1",
+        "serverless-http": "1.9.0",
         "speakeasy": "2.0.0",
         "swagger-ui-express": "4.0.2",
         "uuid": "3.3.2"
@@ -47,6 +50,9 @@
         "concurrently": "4.1.0",
         "nodemon": "1.18.10",
         "prettier": "1.16.4",
+        "serverless": "1.36.3",
+        "serverless-dotenv-plugin": "2.0.1",
+        "serverless-offline": "4.2.0",
         "tslint": "5.12.1",
         "tslint-config-prettier": "1.18.0",
         "typescript": "3.3.3"

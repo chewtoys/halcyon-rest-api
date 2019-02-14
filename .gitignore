@@ -1,4 +1,5 @@
 node_modules
+.serverless
 dist
 yarn-error.log
 .env
