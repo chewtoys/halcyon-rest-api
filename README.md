@@ -1,8 +1,8 @@
-# Halcyon Node Api
+# Halcyon REST Api
 
-A Node.js api project template.
+A Node.js REST api project template.
 
-[https://halcyon-node-api.chrispoulter.com](https://halcyon-node-api.chrispoulter.com)
+[https://halcyon-rest-api.chrispoulter.com](https://halcyon-rest-api.chrispoulter.com)
 
 **Technologies used:**
 

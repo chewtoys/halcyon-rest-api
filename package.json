@@ -1,5 +1,5 @@
 {
-    "name": "halcyon-node-api",
+    "name": "halcyon-rest-api",
     "private": true,
     "engines": {
         "node": ">=8.0.0"
