@@ -29,6 +29,10 @@ export interface IUserListModel extends IPaginatedListModel<IUserSummaryModel> {
     sort?: string;
 }
 
+export interface IUserParams {
+    id: string;
+}
+
 export interface IUserSummaryModel {
     id: string;
     emailAddress: string;
@@ -39,10 +43,6 @@ export interface IUserSummaryModel {
     emailConfirmed: boolean;
     twoFactorEnabled: boolean;
     picture: string;
-}
-
-export interface IUserParams {
-    id: string;
 }
 
 export interface IUserModel extends IUserSummaryModel {

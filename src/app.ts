@@ -47,6 +47,4 @@ app.use('/$', (req: Request, res: Response) => res.redirect(301, '/swagger/'));
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
 
-app.set('port', process.env.PORT || 3001);
-
 export default app;
