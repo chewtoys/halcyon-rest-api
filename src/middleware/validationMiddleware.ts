@@ -1,5 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { isValidEmailAddress, isValidISODate } from '../utils/string';
+import {
+    isValidEmailAddress,
+    isValidISODate,
+    capitalize
+} from '../utils/string';
 import { generateResponse } from '../utils/response';
 
 export interface IValidationOptions {
@@ -26,16 +30,17 @@ const validationMiddleware = (fields: IValidationOptions) => (
     const errors: string[] = [];
 
     for (const [key, options] of Object.entries(fields)) {
+        const displayName = capitalize(key);
         const value = req.body[key] && req.body[key].trim();
 
         if (options.required && !value) {
-            errors.push(`The "${key}" field is required.`);
+            errors.push(`The "${displayName}" field is required.`);
             continue;
         }
 
         if (options.min && (!value || value.length < options.min)) {
             errors.push(
-                `The "${key}" field must be greater than ${
+                `The "${displayName}" field must be greater than ${
                     options.min
                 } characters.`
             );
@@ -43,7 +48,7 @@ const validationMiddleware = (fields: IValidationOptions) => (
 
         if (options.max && (!value || value.length > options.max)) {
             errors.push(
-                `The "${key}" field must be less than ${
+                `The "${displayName}" field must be less than ${
                     options.max
                 } characters.`
             );
@@ -51,7 +56,7 @@ const validationMiddleware = (fields: IValidationOptions) => (
 
         if (options.allow && value && !options.allow.includes(value)) {
             errors.push(
-                `The "${key}" field is not a supported type. ${options.allow.join(
+                `The "${displayName}" field is not a supported type. ${options.allow.join(
                     ', '
                 )}`
             );
@@ -62,14 +67,14 @@ const validationMiddleware = (fields: IValidationOptions) => (
                 case 'email':
                     if (!isValidEmailAddress(value)) {
                         errors.push(
-                            `The "${key}" field must be a valid email address.`
+                            `The "${displayName}" field must be a valid email address.`
                         );
                     }
                     break;
                 case 'date':
                     if (!isValidISODate(value)) {
                         errors.push(
-                            `The "${key}" field must be a valid ISO date.`
+                            `The "${displayName}" field must be a valid ISO date.`
                         );
                     }
                     break;

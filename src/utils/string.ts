@@ -21,6 +21,11 @@ export const tryParseInt = (str: string, defaultValue: number) => {
     return value;
 };
 
+export const capitalize = (value: string) =>
+    (value.match(/[A-Za-z][a-z]*/g) || [])
+        .map((word: string) => word.charAt(0).toUpperCase() + word.substring(1))
+        .join(' ');
+
 export const isValidEmailAddress = (value: string) =>
     /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value);
 
