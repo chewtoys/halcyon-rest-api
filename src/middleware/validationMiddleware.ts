@@ -29,7 +29,7 @@ const validationMiddleware = (fields: IValidationOptions) => (
         const value = req.body[key] && req.body[key].trim();
 
         if (options.required && !value) {
-            errors.push(`The "${key}" field is required`);
+            errors.push(`The "${key}" field is required.`);
             continue;
         }
 
