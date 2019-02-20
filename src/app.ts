@@ -10,10 +10,10 @@ import config from './utils/config';
 import notFoundMiddleware from './middleware/notFoundMiddleware';
 import errorMiddleware from './middleware/errorMiddleware';
 
-import seed from './routes/seed';
 import account from './routes/account';
-import token from './routes/token';
 import manage from './routes/manage';
+import seed from './routes/seed';
+import token from './routes/token';
 import user from './routes/user';
 
 mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true });
@@ -32,10 +32,10 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use('/account', account);
-app.use('/token', token);
 app.use('/manage', manage);
-app.use('/user', user);
 app.use('/seed', seed);
+app.use('/token', token);
+app.use('/user', user);
 
 app.use(
     '/swagger',

@@ -15,7 +15,6 @@
         "deploy": "serverless deploy"
     },
     "dependencies": {
-        "async-middleware": "1.2.1",
         "bcryptjs": "2.4.3",
         "body-parser": "1.18.3",
         "cors": "2.8.5",

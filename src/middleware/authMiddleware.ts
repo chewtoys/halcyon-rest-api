@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { wrap } from 'async-middleware';
 import jsonWebToken from 'jsonwebtoken';
+import wrap from '../middleware/asyncMiddleware';
 import config from '../utils/config';
 import { generateResponse } from '../utils/response';
 

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { wrap } from 'async-middleware';
 import handlers from '../handlers';
+import wrap from '../middleware/asyncMiddleware';
 import validate from '../middleware/validationMiddleware';
 import jwt from '../utils/jwt';
 import { generateResponse } from '../utils/response';

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import { wrap } from 'async-middleware';
 import * as repository from '../repositories/userRepository';
+import wrap from '../middleware/asyncMiddleware';
 import * as password from '../utils/password';
 import config from '../utils/config';
 import { generateResponse } from '../utils/response';

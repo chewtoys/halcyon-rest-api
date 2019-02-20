@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { wrap } from 'async-middleware';
 import * as repository from '../repositories/userRepository';
 import { IBaseProfileModel } from './manageController';
+import wrap from '../middleware/asyncMiddleware';
 import validate from '../middleware/validationMiddleware';
 import * as password from '../utils/password';
 import { tryParseInt } from '../utils/string';

@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { wrap } from 'async-middleware';
 import uuidv4 from 'uuid/v4';
 import * as repository from '../repositories/userRepository';
 import { IBaseProfileModel } from './manageController';
 import providers from '../providers';
+import wrap from '../middleware/asyncMiddleware';
 import validate from '../middleware/validationMiddleware';
 import * as password from '../utils/password';
 import * as email from '../utils/email';
