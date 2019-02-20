@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "A Node.js api project template.",
+        "description": "A Node.js REST api project template.",
         "version": "v1",
         "title": "Halcyon Api"
     },
