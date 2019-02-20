@@ -83,7 +83,12 @@ export const getProfile = wrap(async (req: Request, res: Response) => {
 });
 
 export const updateProfile = [
-    validate(['emailAddress', 'firstName', 'lastName', 'dateOfBirth']),
+    validate({
+        emailAddress: { type: 'email', required: true, max: 254 },
+        firstName: { required: true, max: 50 },
+        lastName: { required: true, max: 50 },
+        dateOfBirth: { type: 'date', required: true }
+    }),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IUpdateProfileModel;
 
@@ -146,7 +151,9 @@ export const verifyEmail = wrap(async (req: Request, res: Response) => {
 });
 
 export const confirmEmail = [
-    validate(['code']),
+    validate({
+        code: { required: true }
+    }),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IConfirmEmailModel;
 
@@ -170,7 +177,9 @@ export const confirmEmail = [
 ];
 
 export const setPassword = [
-    validate(['newPassword']),
+    validate({
+        newPassword: { required: true, min: 8, max: 50 }
+    }),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as ISetPasswordModel;
 
@@ -194,7 +203,10 @@ export const setPassword = [
 ];
 
 export const changePassword = [
-    validate(['currentPassword', 'newPassword']),
+    validate({
+        currentPassword: { required: true },
+        newPassword: { required: true, min: 8, max: 50 }
+    }),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IChangePasswordModel;
 
@@ -221,7 +233,10 @@ export const changePassword = [
 ];
 
 export const addLogin = [
-    validate(['provider', 'accessToken']),
+    validate({
+        provider: { required: true, max: 50 },
+        accessToken: { required: true }
+    }),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IAddLoginModel;
 
@@ -267,7 +282,10 @@ export const addLogin = [
 ];
 
 export const removeLogin = [
-    validate(['provider', 'externalId']),
+    validate({
+        provider: { required: true, max: 50 },
+        externalId: { required: true, max: 50 }
+    }),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IRemoveLoginModel;
 
@@ -303,7 +321,9 @@ export const getTwoFactorConfig = wrap(async (req: Request, res: Response) => {
 });
 
 export const enableTwoFactor = [
-    validate(['verificationCode']),
+    validate({
+        verificationCode: { required: true }
+    }),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IEnableTwoFactorModel;
 

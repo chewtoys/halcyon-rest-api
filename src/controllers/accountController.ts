@@ -29,13 +29,13 @@ export interface IResetPasswordModel {
 }
 
 export const register = [
-    validate([
-        'emailAddress',
-        'password',
-        'firstName',
-        'lastName',
-        'dateOfBirth'
-    ]),
+    validate({
+        emailAddress: { type: 'email', required: true, max: 254 },
+        password: { required: true, min: 8, max: 50 },
+        firstName: { required: true, max: 50 },
+        lastName: { required: true, max: 50 },
+        dateOfBirth: { type: 'date', required: true }
+    }),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IRegisterModel;
 
@@ -73,14 +73,14 @@ export const register = [
 ];
 
 export const registerExternal = [
-    validate([
-        'provider',
-        'accessToken',
-        'emailAddress',
-        'firstName',
-        'lastName',
-        'dateOfBirth'
-    ]),
+    validate({
+        provider: { required: true, max: 50 },
+        accessToken: { required: true },
+        emailAddress: { type: 'email', required: true, max: 254 },
+        firstName: { required: true, max: 50 },
+        lastName: { required: true, max: 50 },
+        dateOfBirth: { type: 'date', required: true }
+    }),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IRegisterExternalModel;
 
@@ -139,7 +139,9 @@ export const registerExternal = [
 ];
 
 export const forgotPassword = [
-    validate(['emailAddress']),
+    validate({
+        emailAddress: { type: 'email', required: true, max: 254 }
+    }),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IForgotPasswordModel;
 
@@ -165,7 +167,11 @@ export const forgotPassword = [
 ];
 
 export const resetPassword = [
-    validate(['code', 'emailAddress', 'newPassword']),
+    validate({
+        code: { required: true },
+        emailAddress: { type: 'email', required: true, max: 254 },
+        newPassword: { required: true, min: 8, max: 50 }
+    }),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IResetPasswordModel;
 

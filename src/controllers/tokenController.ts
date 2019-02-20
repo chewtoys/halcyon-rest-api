@@ -24,7 +24,12 @@ export interface ITokenModel {
 }
 
 export const getToken = [
-    validate(['grantType']),
+    validate({
+        grantType: {
+            required: true,
+            allow: ['Password', 'RefreshToken', 'External', 'TwoFactor']
+        }
+    }),
     wrap(async (req: Request, res: Response) => {
         const body = req.body as IGetTokenModel;
 
