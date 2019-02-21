@@ -38,11 +38,10 @@ app.use('/token', token);
 app.use('/user', user);
 
 app.use(
-    '/swagger',
+    '/',
     swaggerUi.serve,
     swaggerUi.setup(swaggerDoc, { customSiteTitle: 'Halcyon Api' })
 );
-app.use('/$', (req: Request, res: Response) => res.redirect(301, '/swagger/'));
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);

@@ -9,6 +9,7 @@
         "build": "tsc",
         "watch": "tsc -w",
         "serve": "nodemon --inspect dist/server.js",
+        "serverless": "serverless offline start",
         "lint": "tslint -c tslint.json -p tsconfig.json",
         "format": "prettier --write \"**/*.{ts,tsx,json,scss,md,yml,html}\"",
         "predeploy": "yarn lint && yarn build",
