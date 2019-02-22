@@ -1,11 +1,11 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import cors from 'cors';
 import logger from 'morgan';
 import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDoc from './resources/swagger.json';
-import config from './utils/config';
+
+import connect from './utils/mongo';
 
 import notFoundMiddleware from './middleware/notFoundMiddleware';
 import errorMiddleware from './middleware/errorMiddleware';
@@ -16,20 +16,12 @@ import seed from './routes/seed';
 import token from './routes/token';
 import user from './routes/user';
 
-mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true });
-mongoose.set('useCreateIndex', true);
-mongoose.Promise = global.Promise;
-
-const connection = mongoose.connection;
-connection.on(
-    'error',
-    console.error.bind(console, 'MongoDB connection error:')
-);
-
 const app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(cors());
+
+connect();
 
 app.use('/account', account);
 app.use('/manage', manage);
