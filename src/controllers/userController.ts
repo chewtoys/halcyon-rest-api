@@ -7,16 +7,6 @@ import * as password from '../utils/password';
 import { tryParseInt } from '../utils/string';
 import { generateResponse } from '../utils/response';
 
-export interface IPaginatedListModel<T> {
-    items: T[];
-    page: number;
-    size: number;
-    totalCount: number;
-    totalPages: number;
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-}
-
 export interface IGetUsersModel {
     page: string;
     size: string;
@@ -24,9 +14,16 @@ export interface IGetUsersModel {
     sort?: string;
 }
 
-export interface IUserListModel extends IPaginatedListModel<IUserSummaryModel> {
+export interface IUserListModel {
+    items: IUserSummaryModel[];
     search?: string;
     sort?: string;
+    page: number;
+    size: number;
+    totalCount: number;
+    totalPages: number;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
 }
 
 export interface IUserParams {
