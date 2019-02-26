@@ -1,11 +1,10 @@
-import { Request, Response } from 'express';
 import * as repository from '../repositories/userRepository';
 import wrap from '../middleware/asyncMiddleware';
 import * as password from '../utils/password';
 import config from '../utils/config';
 import { generateResponse } from '../utils/response';
 
-export const seedData = wrap(async (req: Request, res: Response) => {
+export const seedData = wrap(async (_, res) => {
     const user = {
         emailAddress: config.SEED_EMAILADDRESS,
         password: await password.hash(config.SEED_PASSWORD),

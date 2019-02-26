@@ -1,6 +1,11 @@
-import { Request, Response } from 'express';
 import uuidv4 from 'uuid/v4';
 import * as repository from '../repositories/userRepository';
+import {
+    IUserModel,
+    IBaseUserModel,
+    IExternalLoginModel,
+    mapUser
+} from './userController';
 import providers from '../providers';
 import wrap from '../middleware/asyncMiddleware';
 import validate from '../middleware/validationMiddleware';
@@ -9,31 +14,7 @@ import * as twoFactor from '../utils/twoFactor';
 import * as email from '../utils/email';
 import { generateResponse } from '../utils/response';
 
-export interface IProfileModel {
-    emailAddress: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-    hasPassword: boolean;
-    emailConfirmed: boolean;
-    twoFactorEnabled: boolean;
-    picture: string;
-    logins: IExternalLoginModel[];
-}
-
-export interface IExternalLoginModel {
-    provider: string;
-    externalId: string;
-}
-
-export interface IBaseProfileModel {
-    emailAddress: string;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: string;
-}
-
-export interface IUpdateProfileModel extends IBaseProfileModel {}
+export interface IUpdateProfileModel extends IBaseUserModel {}
 
 export interface ISetPasswordModel {
     newPassword: string;
@@ -63,23 +44,14 @@ export interface IEnableTwoFactorModel {
     verificationCode: string;
 }
 
-export const getProfile = wrap(async (req: Request, res: Response) => {
+export const getProfile = wrap(async (_, res) => {
     const user = await repository.getUserById(res.locals.userId);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);
     }
 
-    return generateResponse<IProfileModel>(res, 200, undefined, {
-        emailAddress: user.emailAddress,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        dateOfBirth: user.dateOfBirth,
-        hasPassword: user.hasPassword,
-        emailConfirmed: user.emailConfirmed,
-        twoFactorEnabled: user.twoFactorEnabled,
-        picture: user.picture,
-        logins: user.logins
-    });
+    const result = mapUser(user);
+    return generateResponse<IUserModel>(res, 200, undefined, result);
 });
 
 export const updateProfile = [
@@ -89,7 +61,7 @@ export const updateProfile = [
         lastName: { required: true, max: 50 },
         dateOfBirth: { type: 'date', required: true }
     }),
-    wrap(async (req: Request, res: Response) => {
+    wrap(async (req, res) => {
         const body = req.body as IUpdateProfileModel;
 
         const user = await repository.getUserById(res.locals.userId);
@@ -122,7 +94,7 @@ export const updateProfile = [
     })
 ];
 
-export const verifyEmail = wrap(async (req: Request, res: Response) => {
+export const verifyEmail = wrap(async (_, res) => {
     const user = await repository.getUserById(res.locals.userId);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);
@@ -154,7 +126,7 @@ export const confirmEmail = [
     validate({
         code: { required: true }
     }),
-    wrap(async (req: Request, res: Response) => {
+    wrap(async (req, res) => {
         const body = req.body as IConfirmEmailModel;
 
         const user = await repository.getUserById(res.locals.userId);
@@ -180,7 +152,7 @@ export const setPassword = [
     validate({
         newPassword: { required: true, min: 8, max: 50 }
     }),
-    wrap(async (req: Request, res: Response) => {
+    wrap(async (req, res) => {
         const body = req.body as ISetPasswordModel;
 
         const user = await repository.getUserById(res.locals.userId);
@@ -207,7 +179,7 @@ export const changePassword = [
         currentPassword: { required: true },
         newPassword: { required: true, min: 8, max: 50 }
     }),
-    wrap(async (req: Request, res: Response) => {
+    wrap(async (req, res) => {
         const body = req.body as IChangePasswordModel;
 
         const user = await repository.getUserById(res.locals.userId);
@@ -237,7 +209,7 @@ export const addLogin = [
         provider: { required: true, max: 50 },
         accessToken: { required: true }
     }),
-    wrap(async (req: Request, res: Response) => {
+    wrap(async (req, res) => {
         const body = req.body as IAddLoginModel;
 
         const user = await repository.getUserById(res.locals.userId);
@@ -286,7 +258,7 @@ export const removeLogin = [
         provider: { required: true, max: 50 },
         externalId: { required: true, max: 50 }
     }),
-    wrap(async (req: Request, res: Response) => {
+    wrap(async (req, res) => {
         const body = req.body as IRemoveLoginModel;
 
         const user = await repository.getUserById(res.locals.userId);
@@ -306,7 +278,7 @@ export const removeLogin = [
     })
 ];
 
-export const getTwoFactorConfig = wrap(async (req: Request, res: Response) => {
+export const getTwoFactorConfig = wrap(async (_, res) => {
     const user = await repository.getUserById(res.locals.userId);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);
@@ -324,7 +296,7 @@ export const enableTwoFactor = [
     validate({
         verificationCode: { required: true }
     }),
-    wrap(async (req: Request, res: Response) => {
+    wrap(async (req, res) => {
         const body = req.body as IEnableTwoFactorModel;
 
         const user = await repository.getUserById(res.locals.userId);
@@ -355,7 +327,7 @@ export const enableTwoFactor = [
     })
 ];
 
-export const disableTwoFactor = wrap(async (req: Request, res: Response) => {
+export const disableTwoFactor = wrap(async (_, res) => {
     const user = await repository.getUserById(res.locals.userId);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);
@@ -370,7 +342,7 @@ export const disableTwoFactor = wrap(async (req: Request, res: Response) => {
     ]);
 });
 
-export const deleteAccount = wrap(async (req: Request, res: Response) => {
+export const deleteAccount = wrap(async (_, res) => {
     const user = await repository.getUserById(res.locals.userId);
     if (!user) {
         return generateResponse(res, 404, ['User not found.']);

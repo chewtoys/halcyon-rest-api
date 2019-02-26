@@ -139,7 +139,7 @@
                     "200": {
                         "description": "Success",
                         "schema": {
-                            "$ref": "#/definitions/ResponseProfileModel"
+                            "$ref": "#/definitions/ResponseUserModel"
                         }
                     },
                     "401": {
@@ -572,7 +572,7 @@
                     "200": {
                         "description": "Success",
                         "schema": {
-                            "$ref": "#/definitions/ResponseJwtModel"
+                            "$ref": "#/definitions/ResponseTokenModel"
                         }
                     },
                     "400": {
@@ -955,64 +955,6 @@
                 }
             }
         },
-        "ResponseProfileModel": {
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/ProfileModel"
-                },
-                "messages": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "ProfileModel": {
-            "properties": {
-                "emailAddress": {
-                    "type": "string"
-                },
-                "firstName": {
-                    "type": "string"
-                },
-                "lastName": {
-                    "type": "string"
-                },
-                "dateOfBirth": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "hasPassword": {
-                    "type": "boolean"
-                },
-                "emailConfirmed": {
-                    "type": "boolean"
-                },
-                "twoFactorEnabled": {
-                    "type": "boolean"
-                },
-                "picture": {
-                    "type": "string"
-                },
-                "logins": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/ExternalLoginModel"
-                    }
-                }
-            }
-        },
-        "ExternalLoginModel": {
-            "properties": {
-                "provider": {
-                    "type": "string"
-                },
-                "externalId": {
-                    "type": "string"
-                }
-            }
-        },
         "UpdateProfileModel": {
             "required": [
                 "dateOfBirth",
@@ -1157,10 +1099,10 @@
                 }
             }
         },
-        "ResponseJwtModel": {
+        "ResponseTokenModel": {
             "properties": {
                 "data": {
-                    "$ref": "#/definitions/JwtModel"
+                    "$ref": "#/definitions/TokenModel"
                 },
                 "messages": {
                     "type": "array",
@@ -1170,7 +1112,7 @@
                 }
             }
         },
-        "JwtModel": {
+        "TokenModel": {
             "properties": {
                 "accessToken": {
                     "type": "string"
@@ -1204,7 +1146,7 @@
                 "items": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/UserSummaryModel"
+                        "$ref": "#/definitions/UserModel"
                     }
                 },
                 "page": {
@@ -1231,7 +1173,20 @@
                 }
             }
         },
-        "UserSummaryModel": {
+        "ResponseUserModel": {
+            "properties": {
+                "data": {
+                    "$ref": "#/definitions/UserModel"
+                },
+                "messages": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "UserModel": {
             "properties": {
                 "id": {
                     "type": "string"
@@ -1244,6 +1199,10 @@
                 },
                 "lastName": {
                     "type": "string"
+                },
+                "dateOfBirth": {
+                    "type": "string",
+                    "format": "date-time"
                 },
                 "isLockedOut": {
                     "type": "boolean"
@@ -1258,6 +1217,28 @@
                     "type": "boolean"
                 },
                 "picture": {
+                    "type": "string"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "logins": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ExternalLoginModel"
+                    }
+                }
+            }
+        },
+        "ExternalLoginModel": {
+            "properties": {
+                "provider": {
+                    "type": "string"
+                },
+                "externalId": {
                     "type": "string"
                 }
             }
@@ -1297,60 +1278,6 @@
                     "items": {
                         "type": "string"
                     }
-                }
-            }
-        },
-        "ResponseUserModel": {
-            "properties": {
-                "data": {
-                    "$ref": "#/definitions/UserModel"
-                },
-                "messages": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "UserModel": {
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "emailAddress": {
-                    "type": "string"
-                },
-                "firstName": {
-                    "type": "string"
-                },
-                "lastName": {
-                    "type": "string"
-                },
-                "dateOfBirth": {
-                    "type": "string",
-                    "format": "date-time"
-                },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "isLockedOut": {
-                    "type": "boolean"
-                },
-                "hasPassword": {
-                    "type": "boolean"
-                },
-                "emailConfirmed": {
-                    "type": "boolean"
-                },
-                "twoFactorEnabled": {
-                    "type": "boolean"
-                },
-                "picture": {
-                    "type": "string"
                 }
             }
         },

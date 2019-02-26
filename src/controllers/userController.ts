@@ -1,6 +1,5 @@
-import { Request, Response } from 'express';
 import * as repository from '../repositories/userRepository';
-import { IBaseProfileModel } from './manageController';
+import { IUserModel as IUserDataModel } from '../models/user';
 import wrap from '../middleware/asyncMiddleware';
 import validate from '../middleware/validationMiddleware';
 import * as password from '../utils/password';
@@ -15,7 +14,7 @@ export interface IGetUsersModel {
 }
 
 export interface IUserListModel {
-    items: IUserSummaryModel[];
+    items: IUserModel[];
     search?: string;
     sort?: string;
     page: number;
@@ -30,34 +29,44 @@ export interface IUserParams {
     id: string;
 }
 
-export interface IUserSummaryModel {
+export interface IUserModel {
     id: string;
     emailAddress: string;
     firstName: string;
     lastName: string;
+    dateOfBirth: string;
     isLockedOut: boolean;
     hasPassword: boolean;
     emailConfirmed: boolean;
     twoFactorEnabled: boolean;
     picture: string;
+    roles?: string[];
+    logins: IExternalLoginModel[];
 }
 
-export interface IUserModel extends IUserSummaryModel {
+export interface IExternalLoginModel {
+    provider: string;
+    externalId: string;
+}
+
+export interface IBaseUserModel {
+    emailAddress: string;
+    firstName: string;
+    lastName: string;
     dateOfBirth: string;
-    roles?: string[];
-}
-
-export interface IBaseUserModel extends IBaseProfileModel {
-    roles?: string[];
 }
 
 export interface ICreateUserModel extends IBaseUserModel {
     password: string;
+    roles?: string[];
 }
 
-export interface IUpdateUserModel extends IBaseUserModel {}
+export interface IUpdateUserModel extends IBaseUserModel {
+    id: string;
+    roles?: string[];
+}
 
-export const getUsers = wrap(async (req: Request, res: Response) => {
+export const getUsers = wrap(async (req, res) => {
     const query = req.query as IGetUsersModel;
     const page = tryParseInt(query.page, 1);
     const size = tryParseInt(query.size, 10);
@@ -70,17 +79,7 @@ export const getUsers = wrap(async (req: Request, res: Response) => {
     );
 
     return generateResponse<IUserListModel>(res, 200, undefined, {
-        items: result.items.map(user => ({
-            id: user.id,
-            emailAddress: user.emailAddress,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            isLockedOut: user.isLockedOut,
-            hasPassword: user.hasPassword,
-            emailConfirmed: user.emailConfirmed,
-            twoFactorEnabled: user.twoFactorEnabled,
-            picture: user.picture
-        })),
+        items: result.items.map(mapUser),
         page: result.page,
         size: result.size,
         totalPages: result.totalPages,
@@ -92,7 +91,7 @@ export const getUsers = wrap(async (req: Request, res: Response) => {
     });
 });
 
-export const getUser = wrap(async (req: Request, res: Response) => {
+export const getUser = wrap(async (req, res) => {
     const params = req.params as IUserParams;
 
     const user = await repository.getUserById(params.id);
@@ -100,19 +99,8 @@ export const getUser = wrap(async (req: Request, res: Response) => {
         return generateResponse(res, 404, ['User not found.']);
     }
 
-    return generateResponse<IUserModel>(res, 200, undefined, {
-        id: user.id,
-        emailAddress: user.emailAddress,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        dateOfBirth: user.dateOfBirth,
-        isLockedOut: user.isLockedOut,
-        hasPassword: user.hasPassword,
-        emailConfirmed: user.emailConfirmed,
-        twoFactorEnabled: user.twoFactorEnabled,
-        roles: user.roles,
-        picture: user.picture
-    });
+    const result = mapUser(user);
+    return generateResponse<IUserModel>(res, 200, undefined, result);
 });
 
 export const createUser = [
@@ -123,7 +111,7 @@ export const createUser = [
         lastName: { required: true, max: 50 },
         dateOfBirth: { type: 'date', required: true }
     }),
-    wrap(async (req: Request, res: Response) => {
+    wrap(async (req, res) => {
         const body = req.body as ICreateUserModel;
 
         const existing = await repository.getUserByEmailAddress(
@@ -158,7 +146,7 @@ export const updateUser = [
         lastName: { required: true, max: 50 },
         dateOfBirth: { type: 'date', required: true }
     }),
-    wrap(async (req: Request, res: Response) => {
+    wrap(async (req, res) => {
         const params = req.params as IUserParams;
         const body = req.body as IUpdateUserModel;
 
@@ -193,7 +181,7 @@ export const updateUser = [
     })
 ];
 
-export const lockUser = wrap(async (req: Request, res: Response) => {
+export const lockUser = wrap(async (req, res) => {
     const params = req.params as IUserParams;
 
     const user = await repository.getUserById(params.id);
@@ -213,7 +201,7 @@ export const lockUser = wrap(async (req: Request, res: Response) => {
     return generateResponse(res, 200, ['User successfully locked.']);
 });
 
-export const unlockUser = wrap(async (req: Request, res: Response) => {
+export const unlockUser = wrap(async (req, res) => {
     const params = req.params as IUserParams;
 
     const user = await repository.getUserById(params.id);
@@ -227,7 +215,7 @@ export const unlockUser = wrap(async (req: Request, res: Response) => {
     return generateResponse(res, 200, ['User successfully unlocked.']);
 });
 
-export const deleteUser = wrap(async (req: Request, res: Response) => {
+export const deleteUser = wrap(async (req, res) => {
     const params = req.params as IUserParams;
 
     const user = await repository.getUserById(params.id);
@@ -244,4 +232,22 @@ export const deleteUser = wrap(async (req: Request, res: Response) => {
     await repository.removeUser(user);
 
     return generateResponse(res, 200, ['User successfully deleted.']);
+});
+
+export const mapUser = (user: IUserDataModel): IUserModel => ({
+    id: user.id,
+    emailAddress: user.emailAddress,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    dateOfBirth: new Date(user.dateOfBirth).toISOString(),
+    isLockedOut: !!user.isLockedOut,
+    hasPassword: user.hasPassword,
+    emailConfirmed: !!user.emailConfirmed,
+    twoFactorEnabled: !!user.twoFactorEnabled,
+    picture: user.picture,
+    roles: user.roles,
+    logins: user.logins.map(login => ({
+        provider: login.provider,
+        externalId: login.externalId
+    }))
 });

@@ -3,9 +3,9 @@ import { generateResponse } from '../utils/response';
 
 const errorMiddleware = (
     err: any,
-    req: Request,
+    _: Request,
     res: Response,
-    next: NextFunction
+    __: NextFunction
 ) => generateResponse(res, err.status || 500, [err.message]);
 
 export default errorMiddleware;

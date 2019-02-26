@@ -1,7 +1,6 @@
-import { Request, Response } from 'express';
 import uuidv4 from 'uuid/v4';
 import * as repository from '../repositories/userRepository';
-import { IBaseProfileModel } from './manageController';
+import { IBaseUserModel } from './userController';
 import providers from '../providers';
 import wrap from '../middleware/asyncMiddleware';
 import validate from '../middleware/validationMiddleware';
@@ -9,11 +8,11 @@ import * as password from '../utils/password';
 import * as email from '../utils/email';
 import { generateResponse } from '../utils/response';
 
-export interface IRegisterModel extends IBaseProfileModel {
+export interface IRegisterModel extends IBaseUserModel {
     password: string;
 }
 
-export interface IRegisterExternalModel extends IBaseProfileModel {
+export interface IRegisterExternalModel extends IBaseUserModel {
     provider: string;
     accessToken: string;
 }
@@ -36,7 +35,7 @@ export const register = [
         lastName: { required: true, max: 50 },
         dateOfBirth: { type: 'date', required: true }
     }),
-    wrap(async (req: Request, res: Response) => {
+    wrap(async (req, res) => {
         const body = req.body as IRegisterModel;
 
         const existing = await repository.getUserByEmailAddress(
@@ -81,7 +80,7 @@ export const registerExternal = [
         lastName: { required: true, max: 50 },
         dateOfBirth: { type: 'date', required: true }
     }),
-    wrap(async (req: Request, res: Response) => {
+    wrap(async (req, res) => {
         const body = req.body as IRegisterExternalModel;
 
         const provider = providers[body.provider];
@@ -142,7 +141,7 @@ export const forgotPassword = [
     validate({
         emailAddress: { type: 'email', required: true, max: 254 }
     }),
-    wrap(async (req: Request, res: Response) => {
+    wrap(async (req, res) => {
         const body = req.body as IForgotPasswordModel;
 
         const user = await repository.getUserByEmailAddress(body.emailAddress);
@@ -172,7 +171,7 @@ export const resetPassword = [
         emailAddress: { type: 'email', required: true, max: 254 },
         newPassword: { required: true, min: 8, max: 50 }
     }),
-    wrap(async (req: Request, res: Response) => {
+    wrap(async (req, res) => {
         const body = req.body as IResetPasswordModel;
 
         const user = await repository.getUserByEmailAddress(body.emailAddress);
