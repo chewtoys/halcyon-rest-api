@@ -62,7 +62,6 @@ export interface ICreateUserModel extends IBaseUserModel {
 }
 
 export interface IUpdateUserModel extends IBaseUserModel {
-    id: string;
     roles?: string[];
 }
 
