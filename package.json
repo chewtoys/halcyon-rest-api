@@ -13,7 +13,8 @@
         "lint": "tslint -c tslint.json -p tsconfig.json",
         "format": "prettier --write \"**/*.{ts,tsx,json,scss,md,yml,html}\"",
         "predeploy": "yarn lint && yarn build",
-        "deploy": "serverless deploy"
+        "deploy": "serverless deploy",
+        "remove": "serverless remove"
     },
     "dependencies": {
         "bcryptjs": "2.4.3",
