@@ -145,7 +145,6 @@ export const forgotPassword = [
         const body = req.body as IForgotPasswordModel;
 
         const user = await repository.getUserByEmailAddress(body.emailAddress);
-
         if (user) {
             user.passwordResetToken = uuidv4();
             await repository.updateUser(user);
@@ -175,7 +174,6 @@ export const resetPassword = [
         const body = req.body as IResetPasswordModel;
 
         const user = await repository.getUserByEmailAddress(body.emailAddress);
-
         if (!user || user.passwordResetToken !== body.code) {
             return generateResponse(res, 400, ['Invalid token.']);
         }
