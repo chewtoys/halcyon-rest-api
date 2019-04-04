@@ -1,4 +1,5 @@
 import User, { IUser, IUserModel } from '../models/user';
+import { Provider } from '../providers';
 
 export const getUserById = (id: string) => User.findById(id);
 
@@ -12,10 +13,7 @@ export const getUserByRefreshToken = async (refreshToken: string) =>
         'refreshTokens.token': refreshToken
     });
 
-export const getUserByLogin = async (
-    provider: 'Facebook' | 'Google',
-    externalId: string
-) =>
+export const getUserByLogin = async (provider: Provider, externalId: string) =>
     User.findOne({
         'logins.provider': provider,
         'logins.externalId': externalId

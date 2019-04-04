@@ -1,7 +1,7 @@
 import uuidv4 from 'uuid/v4';
 import * as repository from '../repositories/userRepository';
 import { IBaseUserModel } from './userController';
-import providers from '../providers';
+import providers, { Provider } from '../providers';
 import wrap from '../middleware/asyncMiddleware';
 import validate from '../middleware/validationMiddleware';
 import * as password from '../utils/password';
@@ -13,7 +13,7 @@ export interface IRegisterModel extends IBaseUserModel {
 }
 
 export interface IRegisterExternalModel extends IBaseUserModel {
-    provider: 'Facebook' | 'Google';
+    provider: Provider;
     accessToken: string;
 }
 

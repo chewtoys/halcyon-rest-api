@@ -1,5 +1,6 @@
 import * as repository from '../repositories/userRepository';
 import { IUserModel as IUserDataModel } from '../models/user';
+import { Provider } from '../providers';
 import wrap from '../middleware/asyncMiddleware';
 import validate from '../middleware/validationMiddleware';
 import * as password from '../utils/password';
@@ -45,7 +46,7 @@ export interface IUserModel {
 }
 
 export interface IExternalLoginModel {
-    provider: 'Facebook' | 'Google';
+    provider: Provider;
     externalId: string;
 }
 

@@ -1,15 +1,16 @@
 import { Request, Response } from 'express';
 import handlers from '../handlers';
+import { Provider } from '../providers';
 import wrap from '../middleware/asyncMiddleware';
 import validate from '../middleware/validationMiddleware';
 import jwt from '../utils/jwt';
 import { generateResponse } from '../utils/response';
 
 export interface IGetTokenModel {
-    grantType: 'Password' | 'RefreshToken' | 'External' | 'TwoFactor';
+    grantType: GrantType;
     emailAddress?: string;
     password?: string;
-    provider?: 'Facebook' | 'Google';
+    provider?: Provider;
     accessToken?: string;
     verificationCode?: string;
     refreshToken?: string;

@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import { Document, Schema, Model, model, models } from 'mongoose';
+import { Provider } from '../providers';
 
 export interface IUser {
     emailAddress: string;
@@ -20,7 +21,7 @@ export interface IUser {
 }
 
 export interface IUserLogin {
-    provider: 'Facebook' | 'Google';
+    provider: Provider;
     externalId: string;
 }
 

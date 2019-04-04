@@ -6,7 +6,7 @@ import {
     IExternalLoginModel,
     mapUser
 } from './userController';
-import providers from '../providers';
+import providers, { Provider } from '../providers';
 import wrap from '../middleware/asyncMiddleware';
 import validate from '../middleware/validationMiddleware';
 import * as password from '../utils/password';
@@ -29,7 +29,7 @@ export interface IConfirmEmailModel {
 }
 
 export interface IAddLoginModel {
-    provider: 'Facebook' | 'Google';
+    provider: Provider;
     accessToken: string;
 }
 

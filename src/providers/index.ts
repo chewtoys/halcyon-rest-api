@@ -1,6 +1,8 @@
 import * as facebook from './facebook';
 import * as google from './google';
 
+export type Provider = 'Facebook' | 'Google';
+
 export interface IProviderResponse {
     userId: string;
 }

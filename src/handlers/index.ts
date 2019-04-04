@@ -1,14 +1,17 @@
 import { IUserModel } from '../models/user';
+import { Provider } from '../providers';
 import * as password from './password';
 import * as refreshToken from './refreshToken';
 import * as external from './external';
 import * as twoFactor from './twoFactor';
 
+export type GrantType = 'Password' | 'RefreshToken' | 'External' | 'TwoFactor';
+
 export interface IHandlerRequest {
     emailAddress?: string;
     password?: string;
     refreshToken?: string;
-    provider?: 'Facebook' | 'Google';
+    provider?: Provider;
     accessToken?: string;
     verificationCode?: string;
 }
