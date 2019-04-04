@@ -5,7 +5,12 @@ import * as refreshToken from './refreshToken';
 import * as external from './external';
 import * as twoFactor from './twoFactor';
 
-export type GrantType = 'Password' | 'RefreshToken' | 'External' | 'TwoFactor';
+export enum GrantType {
+    Password = 'Password',
+    RefreshToken = 'RefreshToken',
+    External = 'External',
+    TwoFactor = 'TwoFactor'
+}
 
 export interface IHandlerRequest {
     emailAddress?: string;

@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import handlers from '../handlers';
+import handlers, { GrantType } from '../handlers';
 import { Provider } from '../providers';
 import wrap from '../middleware/asyncMiddleware';
 import validate from '../middleware/validationMiddleware';
