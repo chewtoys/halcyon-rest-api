@@ -20,7 +20,7 @@ export interface IUser {
 }
 
 export interface IUserLogin {
-    provider: string;
+    provider: 'Facebook' | 'Google';
     externalId: string;
 }
 

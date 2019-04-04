@@ -8,7 +8,7 @@ export interface IHandlerRequest {
     emailAddress?: string;
     password?: string;
     refreshToken?: string;
-    provider?: string;
+    provider?: 'Facebook' | 'Google';
     accessToken?: string;
     verificationCode?: string;
 }

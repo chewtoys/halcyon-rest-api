@@ -13,7 +13,7 @@ export interface IRegisterModel extends IBaseUserModel {
 }
 
 export interface IRegisterExternalModel extends IBaseUserModel {
-    provider: string;
+    provider: 'Facebook' | 'Google';
     accessToken: string;
 }
 
@@ -73,7 +73,7 @@ export const register = [
 
 export const registerExternal = [
     validate({
-        provider: { required: true, max: 50 },
+        provider: { required: true, allow: ['Facebook', 'Google'] },
         accessToken: { required: true },
         emailAddress: { type: 'email', required: true, max: 254 },
         firstName: { required: true, max: 50 },

@@ -6,10 +6,10 @@ import jwt from '../utils/jwt';
 import { generateResponse } from '../utils/response';
 
 export interface IGetTokenModel {
-    grantType: string;
+    grantType: 'Password' | 'RefreshToken' | 'External' | 'TwoFactor';
     emailAddress?: string;
     password?: string;
-    provider?: string;
+    provider?: 'Facebook' | 'Google';
     accessToken?: string;
     verificationCode?: string;
     refreshToken?: string;

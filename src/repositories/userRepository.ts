@@ -12,7 +12,10 @@ export const getUserByRefreshToken = async (refreshToken: string) =>
         'refreshTokens.token': refreshToken
     });
 
-export const getUserByLogin = async (provider: string, externalId: string) =>
+export const getUserByLogin = async (
+    provider: 'Facebook' | 'Google',
+    externalId: string
+) =>
     User.findOne({
         'logins.provider': provider,
         'logins.externalId': externalId

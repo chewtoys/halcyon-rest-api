@@ -45,7 +45,7 @@ export interface IUserModel {
 }
 
 export interface IExternalLoginModel {
-    provider: string;
+    provider: 'Facebook' | 'Google';
     externalId: string;
 }
 
