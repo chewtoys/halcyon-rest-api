@@ -28,7 +28,7 @@ export const getToken = [
     validate({
         grantType: {
             required: true,
-            allow: ['Password', 'RefreshToken', 'External', 'TwoFactor']
+            allow: Object.values(GrantType).map(value => value)
         }
     }),
     wrap(async (req: Request, res: Response) => {

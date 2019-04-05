@@ -206,7 +206,10 @@ export const changePassword = [
 
 export const addLogin = [
     validate({
-        provider: { required: true, allow: ['Facebook', 'Google'] },
+        provider: {
+            required: true,
+            allow: Object.values(Provider).map(value => value)
+        },
         accessToken: { required: true }
     }),
     wrap(async (req, res) => {
@@ -255,7 +258,10 @@ export const addLogin = [
 
 export const removeLogin = [
     validate({
-        provider: { required: true, allow: ['Facebook', 'Google'] },
+        provider: {
+            required: true,
+            allow: Object.values(Provider).map(value => value)
+        },
         externalId: { required: true, max: 50 }
     }),
     wrap(async (req, res) => {

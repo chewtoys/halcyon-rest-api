@@ -73,7 +73,10 @@ export const register = [
 
 export const registerExternal = [
     validate({
-        provider: { required: true, allow: ['Facebook', 'Google'] },
+        provider: {
+            required: true,
+            allow: Object.values(Provider).map(value => value)
+        },
         accessToken: { required: true },
         emailAddress: { type: 'email', required: true, max: 254 },
         firstName: { required: true, max: 50 },
